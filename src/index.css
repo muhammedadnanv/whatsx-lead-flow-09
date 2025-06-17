@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -99,5 +100,39 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Custom animations for mobile interactions */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translate(-50%, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translate(-50%, -50%);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s ease-out;
+}
+
+/* Ensure touch targets are large enough on mobile */
+@media (max-width: 768px) {
+  button, .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better spacing for mobile forms */
+  .mobile-form-spacing {
+    padding: 1rem;
+  }
+  
+  /* Improve text readability on small screens */
+  .mobile-text {
+    line-height: 1.6;
   }
 }
