@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { MessageCircle, Zap, Users, BarChart3, ArrowRight, CheckCircle, Play } from "lucide-react";
+import { MessageCircle, Zap, Users, BarChart3, ArrowRight, CheckCircle, Play, Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [isCodeVisible, setIsCodeVisible] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,6 +34,80 @@ const Index = () => {
     // Reset form
     setFormData({ name: "", email: "", message: "" });
     setIsFormVisible(false);
+  };
+
+  const formCode = `<!-- WhatsX Form Popup -->
+<div id="whatsx-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999;">
+  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-width: 400px; width: 90%;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h3 style="margin: 0; font-size: 1.25rem; font-weight: 600;">Get In Touch!</h3>
+      <button onclick="closeWhatsXPopup()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+    </div>
+    <form id="whatsx-form">
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Full Name</label>
+        <input type="text" name="name" required style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Email Address</label>
+        <input type="email" name="email" required style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px;">
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Your Message</label>
+        <textarea name="message" required rows="3" style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; resize: vertical;"></textarea>
+      </div>
+      <button type="submit" style="width: 100%; padding: 0.75rem; background: linear-gradient(to right, #10b981, #059669); color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">
+        📱 Send to WhatsApp
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+function showWhatsXPopup() {
+  document.getElementById('whatsx-popup').style.display = 'block';
+}
+
+function closeWhatsXPopup() {
+  document.getElementById('whatsx-popup').style.display = 'none';
+}
+
+document.getElementById('whatsx-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  const name = formData.get('name');
+  const email = formData.get('email');
+  const message = formData.get('message');
+  
+  // Replace with your WhatsApp number
+  const whatsappUrl = \`https://wa.me/1234567890?text=New Lead from WhatsX Form,\${name},\${email},\${message}\`;
+  
+  window.open(whatsappUrl, '_blank');
+  closeWhatsXPopup();
+  this.reset();
+});
+
+// Close popup when clicking outside
+document.getElementById('whatsx-popup').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeWhatsXPopup();
+  }
+});
+</script>
+
+<!-- Usage: Add this button anywhere on your website -->
+<button onclick="showWhatsXPopup()" style="background: linear-gradient(to right, #10b981, #059669); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
+  Contact Us
+</button>`;
+
+  const copyFormCode = () => {
+    navigator.clipboard.writeText(formCode).then(() => {
+      toast({
+        title: "Code Copied!",
+        description: "Form code has been copied to your clipboard.",
+        duration: 3000,
+      });
+    });
   };
 
   const features = [
@@ -118,10 +193,11 @@ const Index = () => {
             </Button>
             <Button 
               size="lg" 
-              variant="outline" 
-              className="border-2 border-green-200 hover:border-green-300 text-lg px-8 py-6 rounded-xl"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-lg px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+              onClick={() => setIsCodeVisible(!isCodeVisible)}
             >
-              Watch Video <ArrowRight className="w-5 h-5 ml-2" />
+              <Copy className="w-5 h-5 mr-2" />
+              Get Code
             </Button>
           </div>
 
@@ -193,6 +269,51 @@ const Index = () => {
                   <p className="text-xs text-gray-500 mt-3 text-center">
                     This message will be sent directly to our WhatsApp
                   </p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Copy Code Popup */}
+          {isCodeVisible && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <Card className="w-full max-w-4xl bg-white shadow-2xl animate-scale-in max-h-[80vh] overflow-hidden">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-semibold text-gray-800">Copy Your Form Code</h3>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => setIsCodeVisible(false)}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      ✕
+                    </Button>
+                  </div>
+                  
+                  <p className="text-gray-600 mb-4">
+                    Copy and paste this code into your website to add the WhatsX form popup:
+                  </p>
+                  
+                  <div className="relative">
+                    <pre className="bg-gray-100 p-4 rounded-lg text-sm overflow-auto max-h-96 border">
+                      <code>{formCode}</code>
+                    </pre>
+                    <Button
+                      onClick={copyFormCode}
+                      className="absolute top-2 right-2 bg-white hover:bg-gray-50 text-gray-700 border"
+                      size="sm"
+                    >
+                      <Copy className="w-4 h-4 mr-2" />
+                      Copy Code
+                    </Button>
+                  </div>
+                  
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <p className="text-sm text-blue-800">
+                      <strong>Note:</strong> Remember to replace "1234567890" with your actual WhatsApp number in the code above.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
