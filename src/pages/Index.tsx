@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,9 +20,8 @@ const Index = () => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simulate WhatsApp message creation
-    const whatsappMessage = `New Lead from WhatsX Form:%0A%0AName: ${formData.name}%0AEmail: ${formData.email}%0AMessage: ${formData.message}`;
-    const whatsappUrl = `https://wa.me/1234567890?text=${whatsappMessage}`;
+    // Create WhatsApp URL with the specified format
+    const whatsappUrl = `https://wa.me/1234567890?text=New Lead from WhatsX Form,${formData.name},${formData.email},${formData.message}`;
     
     // Show success toast
     toast({
