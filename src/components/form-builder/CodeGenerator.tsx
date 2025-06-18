@@ -126,8 +126,8 @@ async function sendChatMessage(chatId) {
   showTypingIndicator(chatId);
   
   try {
-    // Call Gemini API
-    const response = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${aiAgentConfig.geminiApiKey}\`, {
+    // Call Gemini API with correct model name
+    const response = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${aiAgentConfig.geminiApiKey}\`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

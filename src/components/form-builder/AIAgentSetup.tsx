@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Key, MessageSquare, Settings, Sparkles, AlertCircle } from "lucide-react";
+import { Bot, Key, MessageSquare, Settings, Sparkles, AlertCircle, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export interface AIAgentConfig {
@@ -28,6 +28,7 @@ interface AIAgentSetupProps {
 export const AIAgentSetup = ({ config, onUpdateConfig }: AIAgentSetupProps) => {
   const { toast } = useToast();
   const [isTestingConnection, setIsTestingConnection] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const testGeminiConnection = async () => {
     if (!config.geminiApiKey) {
@@ -40,10 +41,13 @@ export const AIAgentSetup = ({ config, onUpdateConfig }: AIAgentSetupProps) => {
     }
 
     setIsTestingConnection(true);
+    setConnectionStatus('idle');
     
     try {
-      // Test connection to Gemini API
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${config.geminiApiKey}`, {
+      console.log('Testing Gemini API connection...');
+      
+      // Use the correct model name for Gemini
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${config.geminiApiKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,21 +55,36 @@ export const AIAgentSetup = ({ config, onUpdateConfig }: AIAgentSetupProps) => {
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: "Hello, this is a test message."
+              text: "Hello, this is a test message. Please respond with 'Connection successful'."
             }]
-          }]
+          }],
+          generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 50
+          }
         }),
       });
 
+      console.log('API Response status:', response.status);
+      
       if (response.ok) {
+        const data = await response.json();
+        console.log('API Response data:', data);
+        
+        setConnectionStatus('success');
         toast({
           title: "Connection Successful! ✨",
           description: "Your Gemini API key is working correctly.",
         });
       } else {
-        throw new Error('API key validation failed');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('API Error:', errorData);
+        setConnectionStatus('error');
+        throw new Error(`API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
       }
     } catch (error) {
+      console.error('Connection test failed:', error);
+      setConnectionStatus('error');
       toast({
         title: "Connection Failed",
         description: "Please check your API key and try again.",
@@ -115,19 +134,28 @@ export const AIAgentSetup = ({ config, onUpdateConfig }: AIAgentSetupProps) => {
                   <Key className="w-4 h-4 text-gray-600" />
                   <Label htmlFor="geminiApiKey" className="font-medium">Gemini API Key</Label>
                   <Badge variant="secondary" className="text-xs">Required</Badge>
+                  {connectionStatus === 'success' && (
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  )}
+                  {connectionStatus === 'error' && (
+                    <AlertCircle className="w-4 h-4 text-red-600" />
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Input
                     id="geminiApiKey"
                     type="password"
                     value={config.geminiApiKey}
-                    onChange={(e) => onUpdateConfig({ geminiApiKey: e.target.value })}
+                    onChange={(e) => {
+                      onUpdateConfig({ geminiApiKey: e.target.value });
+                      setConnectionStatus('idle');
+                    }}
                     placeholder="AIzaSy..."
                     className="font-mono text-sm"
                   />
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-gray-500">
-                      Get your API key from Google AI Studio
+                      Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google AI Studio</a>
                     </p>
                     <Button
                       onClick={testGeminiConnection}
@@ -177,7 +205,7 @@ export const AIAgentSetup = ({ config, onUpdateConfig }: AIAgentSetupProps) => {
                   id="systemPrompt"
                   value={config.systemPrompt}
                   onChange={(e) => onUpdateConfig({ systemPrompt: e.target.value })}
-                  placeholder="You are a helpful customer support assistant. Help users with their questions about our products and services..."
+                  placeholder="You are a helpful customer support assistant for WhatsX forms. Help users with their questions about filling out the form and provide relevant information."
                   rows={4}
                   className="text-sm"
                 />
@@ -193,7 +221,7 @@ export const AIAgentSetup = ({ config, onUpdateConfig }: AIAgentSetupProps) => {
                   id="welcomeMessage"
                   value={config.welcomeMessage}
                   onChange={(e) => onUpdateConfig({ welcomeMessage: e.target.value })}
-                  placeholder="Hi! I'm here to help you with any questions about our form. How can I assist you today?"
+                  placeholder="Hi! I'm your WhatsX assistant. How can I help you with this form today?"
                   rows={2}
                   className="text-sm"
                 />

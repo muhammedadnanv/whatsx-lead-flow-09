@@ -54,6 +54,11 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
     
     setIsSubmitted(true);
     setTimeout(() => setIsSubmitted(false), 3000);
+    
+    toast({
+      title: "Form Submitted!",
+      description: "Your message has been prepared for WhatsApp.",
+    });
   };
 
   const updateFormData = (fieldId: string, value: any) => {
@@ -83,7 +88,9 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
 
     try {
       console.log('Sending message to Gemini API...');
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${aiAgentConfig.geminiApiKey}`, {
+      
+      // Use the correct Gemini model
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${aiAgentConfig.geminiApiKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -325,6 +332,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
             </p>
           )}
           <Button
+            onClick={handleSubmit}
             size="sm"
             className="w-full text-xs"
             style={buttonStyle}
