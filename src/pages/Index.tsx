@@ -381,9 +381,9 @@ document.addEventListener('keydown', function(e) {
             Transforming lead capture with instant WhatsApp delivery
           </p>
           <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-gray-400">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Support</a>
+            <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link to="/support" className="hover:text-white transition-colors">Support</Link>
           </div>
         </div>
       </footer>
