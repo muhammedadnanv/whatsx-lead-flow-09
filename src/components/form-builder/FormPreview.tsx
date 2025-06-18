@@ -76,7 +76,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
             onChange={(e) => updateFormData(field.id, e.target.value)}
             required={field.required}
             style={inputStyles}
-            className="mt-1"
+            className="mt-1 mobile-text text-base"
           />
         );
 
@@ -88,7 +88,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
             onChange={(e) => updateFormData(field.id, e.target.value)}
             required={field.required}
             style={inputStyles}
-            className="mt-1"
+            className="mt-1 mobile-text text-base"
             rows={3}
           />
         );
@@ -100,12 +100,12 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
             onValueChange={(value) => updateFormData(field.id, value)}
             required={field.required}
           >
-            <SelectTrigger className="mt-1" style={inputStyles}>
+            <SelectTrigger className="mt-1 mobile-text text-base" style={inputStyles}>
               <SelectValue placeholder={field.placeholder || 'Select an option'} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white z-50">
               {field.options?.map((option, index) => (
-                <SelectItem key={index} value={option}>
+                <SelectItem key={index} value={option} className="text-base">
                   {option}
                 </SelectItem>
               ))}
@@ -121,8 +121,9 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
               checked={formData[field.id] || false}
               onCheckedChange={(checked) => updateFormData(field.id, checked)}
               required={field.required}
+              className="min-w-[44px] min-h-[44px] sm:w-auto sm:h-auto"
             />
-            <Label htmlFor={field.id} style={baseStyles}>
+            <Label htmlFor={field.id} style={baseStyles} className="mobile-text text-base cursor-pointer">
               {field.label}
             </Label>
           </div>
@@ -137,9 +138,17 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
             required={field.required}
           >
             {field.options?.map((option, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <RadioGroupItem value={option} id={`${field.id}-${index}`} />
-                <Label htmlFor={`${field.id}-${index}`} style={baseStyles}>
+              <div key={index} className="flex items-center space-x-2 py-2">
+                <RadioGroupItem 
+                  value={option} 
+                  id={`${field.id}-${index}`} 
+                  className="min-w-[44px] min-h-[44px] sm:w-auto sm:h-auto"
+                />
+                <Label 
+                  htmlFor={`${field.id}-${index}`} 
+                  style={baseStyles} 
+                  className="mobile-text text-base cursor-pointer flex-1"
+                >
                   {option}
                 </Label>
               </div>
@@ -169,9 +178,9 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
   if (compact) {
     return (
       <div className="relative">
-        <div style={containerStyle} className="p-4 border rounded-lg space-y-3 max-w-sm relative">
+        <div style={containerStyle} className="p-3 sm:p-4 border rounded-lg space-y-2 sm:space-y-3 max-w-sm relative">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-sm" style={{ color: formStyle.textColor }}>
+            <h3 className="font-semibold text-xs sm:text-sm" style={{ color: formStyle.textColor }}>
               {title}
             </h3>
             <BrandWatermark size="sm" position="inline" className="opacity-60" />
@@ -196,7 +205,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
           <Button
             onClick={handleSubmit}
             size="sm"
-            className="w-full text-xs"
+            className="w-full text-xs min-h-[44px]"
             style={buttonStyle}
           >
             <MessageCircle className="w-3 h-3 mr-1" />
@@ -208,15 +217,15 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
   }
 
   return (
-    <div className="bg-black/50 p-4 rounded-lg relative">
-      <div style={containerStyle} className="max-w-md mx-auto p-6 shadow-2xl relative">
+    <div className="bg-black/50 p-2 sm:p-4 rounded-lg relative">
+      <div style={containerStyle} className="max-w-md mx-auto p-4 sm:p-6 shadow-2xl relative">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold" style={{ color: formStyle.textColor }}>
+          <h3 className="text-lg sm:text-xl font-semibold" style={{ color: formStyle.textColor }}>
             {title}
           </h3>
           <div className="flex items-center space-x-2">
             <BrandWatermark size="sm" position="inline" className="opacity-70" />
-            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
+            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600 min-w-[44px] min-h-[44px]">
               <X className="w-4 h-4" />
             </Button>
           </div>
@@ -224,7 +233,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
 
         {isSubmitted && (
           <div className="mb-4 p-3 bg-green-100 border border-green-300 rounded-md">
-            <p className="text-green-800 text-sm">
+            <p className="text-green-800 text-sm mobile-text">
               Form submitted successfully! {!compact && 'Check WhatsApp for the message.'}
             </p>
           </div>
@@ -234,7 +243,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
           {fields.map((field) => (
             <div key={field.id} className="space-y-1">
               {field.type !== 'checkbox' && (
-                <Label className="font-medium" style={{ color: formStyle.textColor }}>
+                <Label className="font-medium text-base" style={{ color: formStyle.textColor }}>
                   {field.label} {field.required && <span className="text-red-500">*</span>}
                 </Label>
               )}
@@ -244,7 +253,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
 
           <Button
             type="submit"
-            className="w-full text-white font-medium"
+            className="w-full text-white font-medium min-h-[44px] text-base"
             style={buttonStyle}
           >
             <MessageCircle className="w-4 h-4 mr-2" />
@@ -252,7 +261,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
           </Button>
         </form>
 
-        <p className="text-xs text-gray-500 mt-3 text-center">
+        <p className="text-xs text-gray-500 mt-3 text-center mobile-text">
           This message will be sent directly to WhatsApp • Powered by WhatsX
         </p>
       </div>
