@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -14,19 +15,30 @@ const Contact = () => {
     subject: "",
     message: ""
   });
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
+    toast({
+      title: "Message Sent!",
+      description: "We'll get back to you within 24 hours.",
+      duration: 3000
+    });
+    setFormData({ name: "", email: "", subject: "", message: "" });
   };
 
   const contactInfo = [
     {
       icon: Mail,
       title: "Email Us",
-      details: "support@whatsx.com",
+      details: "adnanmuhammad4393@gmail.com",
       description: "Get in touch via email for detailed inquiries"
+    },
+    {
+      icon: Phone,
+      title: "Call Us",
+      details: "+91 9656778508",
+      description: "Speak directly with our support team"
     },
     {
       icon: MessageSquare,
@@ -35,29 +47,62 @@ const Contact = () => {
       description: "Instant support through our chat widget"
     },
     {
-      icon: Phone,
-      title: "Call Us",
-      details: "+1 (555) 123-4567",
-      description: "Speak directly with our support team"
-    },
-    {
       icon: MapPin,
       title: "Office",
-      details: "San Francisco, CA",
+      details: "Kerala, India",
       description: "Visit us at our headquarters"
     }
   ];
 
+  const popularArticles = [
+    {
+      title: "Getting Started with WhatsX Forms",
+      content: "Learn how to create your first form in minutes. This comprehensive guide covers everything from setting up your account to publishing your first form. We'll walk you through the form builder interface, explain each field type, and show you how to customize your form's appearance to match your brand.",
+      category: "Getting Started",
+      readTime: "5 min read"
+    },
+    {
+      title: "WhatsApp Business Integration Setup",
+      content: "Complete step-by-step guide to connecting your WhatsApp Business account with WhatsX. This tutorial covers obtaining your WhatsApp Business API credentials, configuring webhooks, setting up message templates, and testing your integration to ensure leads flow seamlessly to your WhatsApp.",
+      category: "Integration",
+      readTime: "8 min read"
+    },
+    {
+      title: "Customizing Your Form Design",
+      content: "Make your forms stand out with custom branding and design. Learn how to change colors, fonts, and layouts to match your website's aesthetic. This guide covers CSS customization, responsive design principles, and best practices for creating forms that convert visitors into leads.",
+      category: "Design",
+      readTime: "6 min read"
+    },
+    {
+      title: "AI Agent Configuration Guide",
+      content: "Set up and train your AI assistant to handle customer inquiries automatically. This detailed guide explains how to configure response templates, set up conversation flows, train the AI with your business information, and optimize responses for better customer engagement.",
+      category: "AI Features",
+      readTime: "10 min read"
+    },
+    {
+      title: "Form Analytics and Performance Tracking",
+      content: "Understand how your forms are performing with detailed analytics. Learn to interpret conversion rates, identify drop-off points, track user behavior, and use data insights to optimize your forms for better results. Includes tips on A/B testing and performance optimization.",
+      category: "Analytics",
+      readTime: "7 min read"
+    },
+    {
+      title: "Advanced WhatsApp Automation",
+      content: "Take your WhatsApp integration to the next level with advanced automation features. Learn to set up automated responses, create conversation workflows, integrate with CRM systems, and use WhatsApp's rich media features to enhance customer communication.",
+      category: "Automation",
+      readTime: "12 min read"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
               <MessageCircle className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
               WhatsX
             </span>
           </Link>
@@ -144,7 +189,7 @@ const Contact = () => {
                 
                 <Button 
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
                 >
                   <Send className="w-4 h-4 mr-2" />
                   Send Message
@@ -160,12 +205,12 @@ const Contact = () => {
                 <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center">
-                        <info.icon className="w-6 h-6 text-blue-600" />
+                      <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 rounded-lg flex items-center justify-center">
+                        <info.icon className="w-6 h-6 text-green-600" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-gray-800 mb-1">{info.title}</h3>
-                        <p className="text-blue-600 font-medium mb-2">{info.details}</p>
+                        <p className="text-green-600 font-medium mb-2">{info.details}</p>
                         <p className="text-gray-600 text-sm">{info.description}</p>
                       </div>
                     </div>
@@ -178,7 +223,7 @@ const Contact = () => {
             <Card className="shadow-lg">
               <CardHeader>
                 <div className="flex items-center">
-                  <Clock className="w-6 h-6 text-blue-600 mr-3" />
+                  <Clock className="w-6 h-6 text-green-600 mr-3" />
                   <CardTitle className="text-xl text-gray-800">Business Hours</CardTitle>
                 </div>
               </CardHeader>
@@ -186,19 +231,19 @@ const Contact = () => {
                 <div className="space-y-2 text-gray-600">
                   <div className="flex justify-between">
                     <span>Monday - Friday</span>
-                    <span>9:00 AM - 6:00 PM PST</span>
+                    <span>9:00 AM - 6:00 PM IST</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Saturday</span>
-                    <span>10:00 AM - 4:00 PM PST</span>
+                    <span>10:00 AM - 4:00 PM IST</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Sunday</span>
                     <span>Closed</span>
                   </div>
-                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-blue-700 text-sm">
-                      <strong>24/7 Support:</strong> Live chat and email support available around the clock
+                  <div className="mt-4 p-3 bg-green-50 rounded-lg">
+                    <p className="text-green-700 text-sm">
+                      <strong>24/7 Support:</strong> Email support available around the clock
                     </p>
                   </div>
                 </div>
@@ -207,22 +252,48 @@ const Contact = () => {
           </div>
         </div>
 
+        {/* Popular Articles Section */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-8 text-center">Popular Help Articles</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {popularArticles.map((article, index) => (
+              <Card key={index} className="shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer group">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                      {article.category}
+                    </span>
+                    <span className="text-xs text-gray-500">{article.readTime}</span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3 group-hover:text-green-600 transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{article.content}</p>
+                  <Button variant="ghost" className="mt-4 p-0 text-green-600 hover:text-green-700">
+                    Read More →
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
         {/* FAQ Section */}
-        <Card className="mt-12 bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+        <Card className="mt-12 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
           <CardContent className="p-8 text-center">
-            <MessageCircle className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+            <MessageCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-800 mb-2">Looking for Quick Answers?</h3>
             <p className="text-gray-600 mb-6">
               Check out our help center and documentation for instant solutions to common questions.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/help-center">
-                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+                <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700">
                   Visit Help Center
                 </Button>
               </Link>
               <Link to="/documentation">
-                <Button variant="outline" className="border-blue-200 text-blue-700 hover:bg-blue-50">
+                <Button variant="outline" className="border-green-200 text-green-700 hover:bg-green-50">
                   Browse Documentation
                 </Button>
               </Link>
