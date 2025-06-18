@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -459,18 +460,18 @@ const Index = () => {
               <ul className="space-y-2 text-gray-400 text-sm sm:text-base">
                 <li><Link to="/form-builder" className="hover:text-white">Form Builder</Link></li>
                 <li><Link to="/ai-agent" className="hover:text-white">AI Agent</Link></li>
-                <li><a href="#" className="hover:text-white">Templates</a></li>
-                <li><a href="#" className="hover:text-white">Integrations</a></li>
+                <li><Link to="/templates" className="hover:text-white">Templates</Link></li>
+                <li><Link to="/integrations" className="hover:text-white">Integrations</Link></li>
               </ul>
             </div>
             
             <div className="text-center sm:text-left">
               <h3 className="font-semibold mb-4 text-base sm:text-lg">Support</h3>
               <ul className="space-y-2 text-gray-400 text-sm sm:text-base">
-                <li><Link to="/support" className="hover:text-white">Help Center</Link></li>
-                <li><a href="#" className="hover:text-white">Documentation</a></li>
-                <li><a href="#" className="hover:text-white">Tutorials</a></li>
-                <li><a href="#" className="hover:text-white">Contact</a></li>
+                <li><Link to="/help-center" className="hover:text-white">Help Center</Link></li>
+                <li><Link to="/documentation" className="hover:text-white">Documentation</Link></li>
+                <li><Link to="/tutorials" className="hover:text-white">Tutorials</Link></li>
+                <li><Link to="/contact" className="hover:text-white">Contact</Link></li>
               </ul>
             </div>
             
@@ -479,7 +480,7 @@ const Index = () => {
               <ul className="space-y-2 text-gray-400 text-sm sm:text-base">
                 <li><Link to="/privacy-policy" className="hover:text-white">Privacy Policy</Link></li>
                 <li><Link to="/terms-of-service" className="hover:text-white">Terms of Service</Link></li>
-                <li><a href="#" className="hover:text-white">Cookie Policy</a></li>
+                <li><Link to="/cookie-policy" className="hover:text-white">Cookie Policy</Link></li>
               </ul>
             </div>
           </div>

@@ -12,6 +12,11 @@ import HelpCenter from "./pages/HelpCenter";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Support from "./pages/Support";
+import Templates from "./pages/Templates";
+import Integrations from "./pages/Integrations";
+import Tutorials from "./pages/Tutorials";
+import Contact from "./pages/Contact";
+import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,11 +31,16 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/form-builder" element={<FormBuilder />} />
           <Route path="/ai-agent" element={<AIAgent />} />
+          <Route path="/templates" element={<Templates />} />
+          <Route path="/integrations" element={<Integrations />} />
           <Route path="/documentation" element={<Documentation />} />
           <Route path="/help-center" element={<HelpCenter />} />
+          <Route path="/tutorials" element={<Tutorials />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/support" element={<Support />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/support" element={<Support />} />
+          <Route path="/cookie-policy" element={<CookiePolicy />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
