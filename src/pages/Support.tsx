@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { ArrowLeft, MessageCircle, Mail, Phone, Clock, HelpCircle, Book, MessageSquare } from "lucide-react";
@@ -33,22 +32,22 @@ const Support = () => {
       icon: Mail,
       title: "Email Support",
       description: "Get help via email",
-      contact: "support@whatsx.com",
+      contact: "adnanmuhammad4393@gmail.com",
       availability: "24/7"
+    },
+    {
+      icon: Phone,
+      title: "Phone Support",
+      description: "Technical support hotline",
+      contact: "+91 9656778508",
+      availability: "Mon-Fri 9AM-6PM IST"
     },
     {
       icon: MessageSquare,
       title: "Live Chat",
       description: "Chat with our team",
       contact: "Available in app",
-      availability: "Mon-Fri 9AM-6PM EST"
-    },
-    {
-      icon: Phone,
-      title: "Phone Support",
-      description: "Speak with an expert",
-      contact: "+1 (555) 123-4567",
-      availability: "Mon-Fri 9AM-6PM EST"
+      availability: "Mon-Fri 9AM-6PM IST"
     }
   ];
 
@@ -96,9 +95,9 @@ const Support = () => {
 
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">How Can We Help?</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Technical Support</h1>
           <p className="text-lg text-gray-600">
-            Get the support you need to make the most of WhatsX
+            Get direct technical assistance for WhatsX platform
           </p>
         </div>
 
