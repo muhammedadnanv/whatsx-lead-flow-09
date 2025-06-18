@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,20 +6,34 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { MessageCircle, X } from "lucide-react";
+import { MessageCircle, X, Bot, Send, Minimize2 } from "lucide-react";
 import { FormField, FormStyle } from "@/pages/FormBuilder";
+import { AIAgentConfig } from "./AIAgentSetup";
+import { BrandWatermark } from "./BrandWatermark";
 
 interface FormPreviewProps {
   title: string;
   fields: FormField[];
   formStyle: FormStyle;
   whatsappNumber: string;
+  aiAgentConfig?: AIAgentConfig;
   compact?: boolean;
 }
 
-export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact = false }: FormPreviewProps) => {
+interface ChatMessage {
+  id: string;
+  text: string;
+  isUser: boolean;
+  timestamp: Date;
+}
+
+export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentConfig, compact = false }: FormPreviewProps) => {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showAIChat, setShowAIChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [chatInput, setChatInput] = useState("");
+  const [isAITyping, setIsAITyping] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +56,81 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
 
   const updateFormData = (fieldId: string, value: any) => {
     setFormData(prev => ({ ...prev, [fieldId]: value }));
+  };
+
+  const sendChatMessage = async () => {
+    if (!chatInput.trim() || !aiAgentConfig?.geminiApiKey) return;
+
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      text: chatInput,
+      isUser: true,
+      timestamp: new Date()
+    };
+
+    setChatMessages(prev => [...prev, userMessage]);
+    setChatInput("");
+    setIsAITyping(true);
+
+    try {
+      // Call Gemini API
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${aiAgentConfig.geminiApiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `${aiAgentConfig.systemPrompt}\n\nForm context: ${title}\nFields: ${fields.map(f => f.label).join(', ')}\n\nUser question: ${chatInput}`
+            }]
+          }],
+          generationConfig: {
+            temperature: aiAgentConfig.temperature,
+            maxOutputTokens: aiAgentConfig.maxTokens,
+          }
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I couldn't process that request.";
+        
+        const aiMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          text: aiResponse,
+          isUser: false,
+          timestamp: new Date()
+        };
+
+        setChatMessages(prev => [...prev, aiMessage]);
+      } else {
+        throw new Error('Failed to get AI response');
+      }
+    } catch (error) {
+      const errorMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        text: "I'm sorry, I'm having trouble connecting right now. Please try again later.",
+        isUser: false,
+        timestamp: new Date()
+      };
+      setChatMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsAITyping(false);
+    }
+  };
+
+  const initializeChat = () => {
+    if (aiAgentConfig?.enabled && chatMessages.length === 0) {
+      const welcomeMessage: ChatMessage = {
+        id: "welcome",
+        text: aiAgentConfig.welcomeMessage,
+        isUser: false,
+        timestamp: new Date()
+      };
+      setChatMessages([welcomeMessage]);
+    }
+    setShowAIChat(true);
   };
 
   const renderField = (field: FormField) => {
@@ -160,49 +248,145 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
 
   if (compact) {
     return (
-      <div style={containerStyle} className="p-4 border rounded-lg space-y-3 max-w-sm">
-        <h3 className="font-semibold text-sm" style={{ color: formStyle.textColor }}>
-          {title}
-        </h3>
-        {fields.slice(0, 2).map((field) => (
-          <div key={field.id} className="space-y-1">
-            {field.type !== 'checkbox' && (
-              <Label className="text-xs font-medium" style={{ color: formStyle.textColor }}>
-                {field.label} {field.required && '*'}
-              </Label>
-            )}
-            <div className="text-xs">
-              {renderField(field)}
+      <div className="relative">
+        <div style={containerStyle} className="p-4 border rounded-lg space-y-3 max-w-sm relative">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-sm" style={{ color: formStyle.textColor }}>
+              {title}
+            </h3>
+            <BrandWatermark size="sm" position="inline" className="opacity-60" />
+          </div>
+          {fields.slice(0, 2).map((field) => (
+            <div key={field.id} className="space-y-1">
+              {field.type !== 'checkbox' && (
+                <Label className="text-xs font-medium" style={{ color: formStyle.textColor }}>
+                  {field.label} {field.required && '*'}
+                </Label>
+              )}
+              <div className="text-xs">
+                {renderField(field)}
+              </div>
+            </div>
+          ))}
+          {fields.length > 2 && (
+            <p className="text-xs text-gray-500">
+              +{fields.length - 2} more fields
+            </p>
+          )}
+          <Button
+            size="sm"
+            className="w-full text-xs"
+            style={buttonStyle}
+          >
+            <MessageCircle className="w-3 h-3 mr-1" />
+            {formStyle.buttonText}
+          </Button>
+          
+          {/* AI Chat Button - Compact */}
+          {aiAgentConfig?.enabled && (
+            <Button
+              onClick={initializeChat}
+              size="sm"
+              variant="outline"
+              className="w-full text-xs border-blue-200 text-blue-600 hover:bg-blue-50"
+            >
+              <Bot className="w-3 h-3 mr-1" />
+              Chat with {aiAgentConfig.agentName}
+            </Button>
+          )}
+        </div>
+
+        {/* AI Chat Widget - Mobile */}
+        {showAIChat && aiAgentConfig?.enabled && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center p-4">
+            <div className="bg-white rounded-t-2xl w-full max-w-sm h-96 flex flex-col">
+              {/* Chat Header */}
+              <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-50 to-purple-50">
+                <div className="flex items-center space-x-2">
+                  <Bot className="w-5 h-5 text-blue-600" />
+                  <span className="font-medium text-blue-900">{aiAgentConfig.agentName}</span>
+                </div>
+                <Button
+                  onClick={() => setShowAIChat(false)}
+                  variant="ghost"
+                  size="sm"
+                  className="min-h-[32px] min-w-[32px]"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+
+              {/* Chat Messages */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                {chatMessages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[80%] p-3 rounded-lg text-sm ${
+                        message.isUser
+                          ? 'bg-blue-600 text-white rounded-br-sm'
+                          : 'bg-gray-100 text-gray-800 rounded-bl-sm'
+                      }`}
+                    >
+                      {message.text}
+                    </div>
+                  </div>
+                ))}
+                {isAITyping && (
+                  <div className="flex justify-start">
+                    <div className="bg-gray-100 text-gray-800 p-3 rounded-lg rounded-bl-sm text-sm">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Chat Input */}
+              <div className="p-4 border-t">
+                <div className="flex space-x-2">
+                  <Input
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder="Ask me anything..."
+                    onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                    className="flex-1 text-sm"
+                  />
+                  <Button
+                    onClick={sendChatMessage}
+                    disabled={!chatInput.trim() || isAITyping}
+                    size="sm"
+                    className="min-h-[40px] min-w-[40px] bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
-        ))}
-        {fields.length > 2 && (
-          <p className="text-xs text-gray-500">
-            +{fields.length - 2} more fields
-          </p>
         )}
-        <Button
-          size="sm"
-          className="w-full text-xs"
-          style={buttonStyle}
-        >
-          <MessageCircle className="w-3 h-3 mr-1" />
-          {formStyle.buttonText}
-        </Button>
       </div>
     );
   }
 
   return (
-    <div className="bg-black/50 p-4 rounded-lg">
-      <div style={containerStyle} className="max-w-md mx-auto p-6 shadow-2xl">
+    <div className="bg-black/50 p-4 rounded-lg relative">
+      <div style={containerStyle} className="max-w-md mx-auto p-6 shadow-2xl relative">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-semibold" style={{ color: formStyle.textColor }}>
             {title}
           </h3>
-          <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
-            <X className="w-4 h-4" />
-          </Button>
+          <div className="flex items-center space-x-2">
+            <BrandWatermark size="sm" position="inline" className="opacity-70" />
+            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-gray-600">
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
 
         {isSubmitted && (
@@ -235,10 +419,97 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, compact 
           </Button>
         </form>
 
+        {/* AI Chat Widget - Desktop */}
+        {aiAgentConfig?.enabled && (
+          <div className="mt-4">
+            <Button
+              onClick={initializeChat}
+              variant="outline"
+              className="w-full border-blue-200 text-blue-600 hover:bg-blue-50"
+            >
+              <Bot className="w-4 h-4 mr-2" />
+              Need help? Chat with {aiAgentConfig.agentName}
+            </Button>
+          </div>
+        )}
+
         <p className="text-xs text-gray-500 mt-3 text-center">
-          This message will be sent directly to WhatsApp
+          This message will be sent directly to WhatsApp • Powered by WhatsX
         </p>
       </div>
+
+      {/* AI Chat Widget - Desktop */}
+      {showAIChat && aiAgentConfig?.enabled && !compact && (
+        <div className="fixed bottom-4 right-4 w-80 h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col z-50">
+          {/* Chat Header */}
+          <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-50 to-purple-50">
+            <div className="flex items-center space-x-2">
+              <Bot className="w-5 h-5 text-blue-600" />
+              <span className="font-medium text-blue-900">{aiAgentConfig.agentName}</span>
+            </div>
+            <Button
+              onClick={() => setShowAIChat(false)}
+              variant="ghost"
+              size="sm"
+              className="min-h-[32px] min-w-[32px]"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+
+          {/* Chat Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {chatMessages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[80%] p-3 rounded-lg text-sm ${
+                    message.isUser
+                      ? 'bg-blue-600 text-white rounded-br-sm'
+                      : 'bg-gray-100 text-gray-800 rounded-bl-sm'
+                  }`}
+                >
+                  {message.text}
+                </div>
+              </div>
+            ))}
+            {isAITyping && (
+              <div className="flex justify-start">
+                <div className="bg-gray-100 text-gray-800 p-3 rounded-lg rounded-bl-sm text-sm">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Chat Input */}
+          <div className="p-4 border-t">
+            <div className="flex space-x-2">
+              <Input
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Ask me anything..."
+                onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                className="flex-1 text-sm"
+              />
+              <Button
+                onClick={sendChatMessage}
+                disabled={!chatInput.trim() || isAITyping}
+                size="sm"
+                className="min-h-[40px] min-w-[40px] bg-blue-600 hover:bg-blue-700"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

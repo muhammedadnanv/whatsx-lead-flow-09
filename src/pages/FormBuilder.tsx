@@ -5,11 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Plus, Eye, Code, Palette, Layout, Settings, Smartphone } from "lucide-react";
+import { ArrowLeft, Plus, Eye, Code, Palette, Layout, Settings, Smartphone, Bot, Sparkles } from "lucide-react";
 import { FormFieldEditor } from "@/components/form-builder/FormFieldEditor";
 import { FormPreview } from "@/components/form-builder/FormPreview";
 import { StyleEditor } from "@/components/form-builder/StyleEditor";
 import { CodeGenerator } from "@/components/form-builder/CodeGenerator";
+import { AIAgentSetup, AIAgentConfig } from "@/components/form-builder/AIAgentSetup";
+import { BrandWatermark } from "@/components/form-builder/BrandWatermark";
 import { Link } from "react-router-dom";
 
 export interface FormField {
@@ -32,7 +34,7 @@ export interface FormStyle {
 }
 
 const FormBuilder = () => {
-  const [activeTab, setActiveTab] = useState<'fields' | 'style' | 'preview' | 'code'>('fields');
+  const [activeTab, setActiveTab] = useState<'fields' | 'style' | 'preview' | 'code' | 'ai-agent'>('fields');
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [formTitle, setFormTitle] = useState("Get In Touch!");
   const [whatsappNumber, setWhatsappNumber] = useState("1234567890");
@@ -70,6 +72,16 @@ const FormBuilder = () => {
     buttonText: 'Send to WhatsApp'
   });
 
+  const [aiAgentConfig, setAiAgentConfig] = useState<AIAgentConfig>({
+    enabled: false,
+    geminiApiKey: '',
+    agentName: 'WhatsX Assistant',
+    systemPrompt: 'You are a helpful customer support assistant for WhatsX forms. Help users with their questions about filling out the form and provide relevant information.',
+    welcomeMessage: 'Hi! I\'m your WhatsX assistant. How can I help you with this form today?',
+    temperature: 0.7,
+    maxTokens: 512
+  });
+
   const addField = (type: FormField['type']) => {
     const newField: FormField = {
       id: Date.now().toString(),
@@ -96,38 +108,47 @@ const FormBuilder = () => {
     setFormStyle({ ...formStyle, ...updates });
   };
 
+  const updateAiAgentConfig = (updates: Partial<AIAgentConfig>) => {
+    setAiAgentConfig({ ...aiAgentConfig, ...updates });
+  };
+
   const tabs = [
     { id: 'fields', label: 'Fields', icon: Layout },
     { id: 'style', label: 'Style', icon: Palette },
+    { id: 'ai-agent', label: 'AI Agent', icon: Bot },
     { id: 'preview', label: 'Preview', icon: Eye },
     { id: 'code', label: 'Code', icon: Code }
   ];
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b shadow-sm sticky top-0 z-40">
+      {/* Header with WhatsX Branding */}
+      <header className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg sticky top-0 z-40">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Link to="/">
-                <Button variant="ghost" size="sm" className="min-h-[44px] min-w-[44px]">
+                <Button variant="ghost" size="sm" className="min-h-[44px] min-w-[44px] text-white hover:bg-white/20">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   <span className="hidden sm:inline">Back</span>
                 </Button>
               </Link>
-              <h1 className="text-xl md:text-2xl font-bold text-gray-800">Form Builder</h1>
+              <div className="flex items-center space-x-2">
+                <Sparkles className="w-6 h-6 text-blue-200" />
+                <h1 className="text-xl md:text-2xl font-bold">WhatsX Form Builder</h1>
+              </div>
             </div>
             
             <div className="flex items-center space-x-2">
-              <Badge className="bg-green-100 text-green-700 hidden sm:inline-flex">
-                No-Code Editor
+              <Badge className="bg-white/20 text-white border-white/30 hidden sm:inline-flex hover:bg-white/30">
+                <Bot className="w-3 h-3 mr-1" />
+                AI-Powered
               </Badge>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={() => setShowMobilePreview(!showMobilePreview)}
-                className="md:hidden min-h-[44px] min-w-[44px]"
+                className="md:hidden min-h-[44px] min-w-[44px] text-white hover:bg-white/20"
               >
                 <Smartphone className="w-4 h-4" />
               </Button>
@@ -140,11 +161,12 @@ const FormBuilder = () => {
         {/* Mobile Layout */}
         <div className="block lg:hidden">
           {/* Form Settings Card - Mobile */}
-          <Card className="mb-4">
-            <CardHeader className="pb-4">
+          <Card className="mb-4 border-2 border-gradient-to-r from-blue-100 to-purple-100">
+            <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-purple-50">
               <CardTitle className="flex items-center text-lg">
-                <Settings className="w-5 h-5 mr-2" />
+                <Settings className="w-5 h-5 mr-2 text-blue-600" />
                 Form Settings
+                <BrandWatermark size="sm" position="inline" className="ml-auto" />
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -178,10 +200,17 @@ const FormBuilder = () => {
                 key={tab.id}
                 variant={activeTab === tab.id ? 'default' : 'outline'}
                 onClick={() => setActiveTab(tab.id as any)}
-                className="flex items-center justify-center py-3 text-sm min-h-[44px]"
+                className={`flex items-center justify-center py-3 text-sm min-h-[44px] ${
+                  activeTab === tab.id 
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
+                    : 'border-blue-200 text-blue-700 hover:bg-blue-50'
+                }`}
               >
                 <tab.icon className="w-4 h-4 mr-2" />
                 {tab.label}
+                {tab.id === 'ai-agent' && aiAgentConfig.enabled && (
+                  <Sparkles className="w-3 h-3 ml-1 text-yellow-300" />
+                )}
               </Button>
             ))}
           </div>
@@ -204,12 +233,20 @@ const FormBuilder = () => {
               />
             )}
 
+            {activeTab === 'ai-agent' && (
+              <AIAgentSetup
+                config={aiAgentConfig}
+                onUpdateConfig={updateAiAgentConfig}
+              />
+            )}
+
             {activeTab === 'preview' && (
               <FormPreview
                 title={formTitle}
                 fields={fields}
                 formStyle={formStyle}
                 whatsappNumber={whatsappNumber}
+                aiAgentConfig={aiAgentConfig}
               />
             )}
 
@@ -219,6 +256,7 @@ const FormBuilder = () => {
                 fields={fields}
                 formStyle={formStyle}
                 whatsappNumber={whatsappNumber}
+                aiAgentConfig={aiAgentConfig}
               />
             )}
           </div>
@@ -243,6 +281,7 @@ const FormBuilder = () => {
                   fields={fields}
                   formStyle={formStyle}
                   whatsappNumber={whatsappNumber}
+                  aiAgentConfig={aiAgentConfig}
                   compact
                 />
               </div>
@@ -255,11 +294,14 @@ const FormBuilder = () => {
           {/* Left Panel - Builder */}
           <div className="lg:col-span-2 space-y-6">
             {/* Form Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Settings className="w-5 h-5 mr-2" />
-                  Form Settings
+            <Card className="border-2 border-gradient-to-r from-blue-100 to-purple-100">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Settings className="w-5 h-5 mr-2 text-blue-600" />
+                    Form Settings
+                  </div>
+                  <BrandWatermark size="sm" position="inline" />
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -285,17 +327,24 @@ const FormBuilder = () => {
             </Card>
 
             {/* Desktop Tabs */}
-            <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+            <div className="flex space-x-1 bg-gradient-to-r from-blue-50 to-purple-50 p-1 rounded-lg border border-blue-200">
               {tabs.map((tab) => (
                 <Button
                   key={tab.id}
                   variant={activeTab === tab.id ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setActiveTab(tab.id as any)}
-                  className="flex-1"
+                  className={`flex-1 ${
+                    activeTab === tab.id 
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md' 
+                      : 'text-blue-700 hover:bg-white/60'
+                  }`}
                 >
                   <tab.icon className="w-4 h-4 mr-2" />
                   {tab.label}
+                  {tab.id === 'ai-agent' && aiAgentConfig.enabled && (
+                    <Sparkles className="w-3 h-3 ml-1 text-yellow-300" />
+                  )}
                 </Button>
               ))}
             </div>
@@ -317,12 +366,20 @@ const FormBuilder = () => {
               />
             )}
 
+            {activeTab === 'ai-agent' && (
+              <AIAgentSetup
+                config={aiAgentConfig}
+                onUpdateConfig={updateAiAgentConfig}
+              />
+            )}
+
             {activeTab === 'preview' && (
               <FormPreview
                 title={formTitle}
                 fields={fields}
                 formStyle={formStyle}
                 whatsappNumber={whatsappNumber}
+                aiAgentConfig={aiAgentConfig}
               />
             )}
 
@@ -332,6 +389,7 @@ const FormBuilder = () => {
                 fields={fields}
                 formStyle={formStyle}
                 whatsappNumber={whatsappNumber}
+                aiAgentConfig={aiAgentConfig}
               />
             )}
           </div>
@@ -339,11 +397,19 @@ const FormBuilder = () => {
           {/* Right Panel - Live Preview */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-sm flex items-center">
-                    <Eye className="w-4 h-4 mr-2" />
-                    Live Preview
+              <Card className="border-2 border-gradient-to-r from-blue-100 to-purple-100">
+                <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
+                  <CardTitle className="text-sm flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Eye className="w-4 h-4 mr-2 text-blue-600" />
+                      Live Preview
+                    </div>
+                    {aiAgentConfig.enabled && (
+                      <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+                        <Bot className="w-3 h-3 mr-1" />
+                        AI
+                      </Badge>
+                    )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -353,6 +419,7 @@ const FormBuilder = () => {
                       fields={fields}
                       formStyle={formStyle}
                       whatsappNumber={whatsappNumber}
+                      aiAgentConfig={aiAgentConfig}
                       compact
                     />
                   </div>
@@ -362,6 +429,9 @@ const FormBuilder = () => {
           </div>
         </div>
       </div>
+
+      {/* Brand Watermark */}
+      <BrandWatermark />
     </div>
   );
 };
