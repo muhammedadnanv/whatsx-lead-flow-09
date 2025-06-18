@@ -1,8 +1,7 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Smartphone, MessageCircle, Zap, Users, Heart, CheckCircle, Star, Play, Globe, Clock } from "lucide-react";
+import { ArrowRight, Smartphone, MessageCircle, Zap, Users, Heart, CheckCircle, Star, Play, Globe, Clock, Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 import { VideoPopup } from "@/components/VideoPopup";
 
@@ -30,6 +29,16 @@ const MobileLanding = () => {
           </div>
         </div>
       </nav>
+
+      {/* Free Platform Banner */}
+      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4">
+        <div className="container mx-auto text-center">
+          <div className="flex items-center justify-center space-x-1 text-xs sm:text-sm font-semibold">
+            <Gift className="w-3 h-3 sm:w-4 sm:h-4 animate-bounce" />
+            <span>🎉 FREE for 7 months - No login required!</span>
+          </div>
+        </div>
+      </div>
 
       {/* Mobile Hero Section */}
       <section className="py-8 px-4">
@@ -73,12 +82,12 @@ const MobileLanding = () => {
               <div className="text-gray-600 text-xs">Setup Time</div>
             </div>
             <div>
-              <div className="text-lg font-bold text-purple-600">90%</div>
-              <div className="text-gray-600 text-xs">Mobile Users</div>
+              <div className="text-lg font-bold text-purple-600">7 Months</div>
+              <div className="text-gray-600 text-xs">Free Access</div>
             </div>
             <div>
-              <div className="text-lg font-bold text-blue-600">Free</div>
-              <div className="text-gray-600 text-xs">Forever</div>
+              <div className="text-lg font-bold text-blue-600">No Cards</div>
+              <div className="text-gray-600 text-xs">Required</div>
             </div>
           </div>
         </div>
@@ -235,7 +244,7 @@ const MobileLanding = () => {
             Start in 2 Minutes
           </h2>
           <p className="text-pink-100 mb-6 text-sm">
-            Create your first mobile form right now
+            Create your first mobile form right now - completely free for 7 months
           </p>
           
           <div className="space-y-3">
@@ -252,7 +261,7 @@ const MobileLanding = () => {
               </div>
               <div className="flex items-center">
                 <Star className="w-3 h-3 mr-1" />
-                Free Forever
+                7 Months Free
               </div>
             </div>
           </div>

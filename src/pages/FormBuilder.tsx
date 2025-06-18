@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ArrowLeft, MessageCircle, Save, Download, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, MessageCircle, Save, Download, Eye, EyeOff, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -128,6 +129,17 @@ const FormBuilder = () => {
       />
       
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        {/* Free Platform Banner */}
+        <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4">
+          <div className="container mx-auto text-center">
+            <div className="flex items-center justify-center space-x-2 text-xs sm:text-sm font-semibold">
+              <Gift className="w-3 h-3 sm:w-4 sm:h-4 animate-bounce" />
+              <span>🎉 This Platform is FREE for the next 7 months - No login, no cards required!</span>
+              <Gift className="w-3 h-3 sm:w-4 sm:h-4 animate-bounce" />
+            </div>
+          </div>
+        </div>
+
         {/* Header */}
         <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">

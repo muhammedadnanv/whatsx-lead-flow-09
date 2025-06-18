@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Zap, Palette, Code, MessageCircle, Smartphone, Globe, Bot, Sparkles, CheckCircle, Star, Users, Building, ShoppingCart, Briefcase, Heart, UserCheck, Monitor, Layers, Play } from "lucide-react";
+import { ArrowRight, Zap, Palette, Code, MessageCircle, Smartphone, Globe, Bot, Sparkles, CheckCircle, Star, Users, Building, ShoppingCart, Briefcase, Heart, UserCheck, Monitor, Layers, Play, Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 import { VideoPopup } from "@/components/VideoPopup";
 
@@ -46,6 +46,17 @@ const Index = () => {
           </div>
         </div>
       </nav>
+
+      {/* Free Platform Banner */}
+      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-4">
+        <div className="container mx-auto text-center">
+          <div className="flex items-center justify-center space-x-2 text-sm sm:text-base font-semibold">
+            <Gift className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce" />
+            <span>🎉 This Platform is FREE for the next 7 months - No login, no cards required!</span>
+            <Gift className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce" />
+          </div>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <section className="py-12 sm:py-16 lg:py-20 mobile-px">
@@ -108,7 +119,7 @@ const Index = () => {
             </div>
             <div className="flex items-center">
               <Star className="w-4 h-4 mr-1 text-yellow-500" />
-              Free Forever
+              Free for 7 Months
             </div>
             <div className="flex items-center">
               <Zap className="w-4 h-4 mr-1 text-blue-500" />
