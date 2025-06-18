@@ -1,18 +1,18 @@
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { ArrowLeft, MessageCircle, Save, Download, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Plus, Eye, Code, Palette, Layout, Settings, Smartphone, Sparkles, Bot } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FormFieldEditor } from "@/components/form-builder/FormFieldEditor";
 import { FormPreview } from "@/components/form-builder/FormPreview";
 import { StyleEditor } from "@/components/form-builder/StyleEditor";
 import { CodeGenerator } from "@/components/form-builder/CodeGenerator";
-import { AIAgentSetup, AIAgentConfig } from "@/components/form-builder/AIAgentSetup";
-import { BrandWatermark } from "@/components/form-builder/BrandWatermark";
-import { Link } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { SEOHead } from "@/components/SEOHead";
 
 export interface FormField {
   id: string;
@@ -27,70 +27,61 @@ export interface FormStyle {
   primaryColor: string;
   backgroundColor: string;
   textColor: string;
-  borderRadius: string;
   fontFamily: string;
+  borderRadius: string;
   spacing: string;
   buttonText: string;
 }
 
 const FormBuilder = () => {
-  const [activeTab, setActiveTab] = useState<'fields' | 'style' | 'ai' | 'preview' | 'code'>('fields');
-  const [showMobilePreview, setShowMobilePreview] = useState(false);
-  const [formTitle, setFormTitle] = useState("Get In Touch!");
-  const [whatsappNumber, setWhatsappNumber] = useState("1234567890");
-  
-  const [aiAgentConfig, setAiAgentConfig] = useState<AIAgentConfig>({
-    enabled: false,
-    geminiApiKey: '',
-    agentName: 'WhatsX Assistant',
-    systemPrompt: 'You are a helpful customer support assistant for WhatsX forms. Help users with their questions about filling out the form and provide relevant information about our services.',
-    welcomeMessage: 'Hi! I\'m your WhatsX assistant. How can I help you with this form today?',
-    temperature: 0.7,
-    maxTokens: 512
-  });
-
-  const [fields, setFields] = useState<FormField[]>([
-    {
-      id: '1',
-      type: 'text',
-      label: 'Full Name',
-      placeholder: 'John Doe',
-      required: true
-    },
-    {
-      id: '2',
-      type: 'email',
-      label: 'Email Address',
-      placeholder: 'john@example.com',
-      required: true
-    },
-    {
-      id: '3',
-      type: 'textarea',
-      label: 'Your Message',
-      placeholder: 'How can we help you?',
-      required: true
-    }
-  ]);
-
+  const [searchParams] = useSearchParams();
+  const { toast } = useToast();
+  const [formTitle, setFormTitle] = useState("Contact Form");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [fields, setFields] = useState<FormField[]>([]);
   const [formStyle, setFormStyle] = useState<FormStyle>({
-    primaryColor: '#10b981',
-    backgroundColor: '#ffffff',
-    textColor: '#1f2937',
-    borderRadius: '8px',
-    fontFamily: 'Inter, sans-serif',
-    spacing: '1rem',
-    buttonText: 'Send to WhatsApp'
+    primaryColor: "#10b981",
+    backgroundColor: "#ffffff",
+    textColor: "#1f2937",
+    fontFamily: "Inter, sans-serif",
+    borderRadius: "8px",
+    spacing: "1rem",
+    buttonText: "Send to WhatsApp"
   });
+  const [showPreview, setShowPreview] = useState(true);
+
+  // Load template if specified in URL
+  useEffect(() => {
+    const templateId = searchParams.get('template');
+    if (templateId) {
+      const templateData = localStorage.getItem('selectedTemplate');
+      if (templateData) {
+        try {
+          const parsed = JSON.parse(templateData);
+          setFormTitle(parsed.title);
+          setFields(parsed.fields);
+          setFormStyle(parsed.formStyle);
+          localStorage.removeItem('selectedTemplate'); // Clean up
+          
+          toast({
+            title: "Template Loaded!",
+            description: "You can now customize your form.",
+          });
+        } catch (error) {
+          console.error('Error loading template:', error);
+        }
+      }
+    }
+  }, [searchParams, toast]);
 
   const addField = (type: FormField['type']) => {
     const newField: FormField = {
       id: Date.now().toString(),
       type,
-      label: `New ${type.charAt(0).toUpperCase() + type.slice(1)}`,
-      placeholder: type === 'textarea' ? 'Enter your message...' : `Enter ${type}...`,
+      label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
       required: false,
-      options: type === 'select' || type === 'radio' ? ['Option 1', 'Option 2'] : undefined
+      placeholder: type === 'email' ? 'Enter your email' : `Enter ${type}`,
+      options: type === 'select' || type === 'radio' ? ['Option 1', 'Option 2', 'Option 3'] : undefined
     };
     setFields([...fields, newField]);
   };
@@ -109,340 +100,170 @@ const FormBuilder = () => {
     setFormStyle({ ...formStyle, ...updates });
   };
 
-  const updateAiConfig = (updates: Partial<AIAgentConfig>) => {
-    setAiAgentConfig({ ...aiAgentConfig, ...updates });
+  const handleSave = () => {
+    const formData = {
+      title: formTitle,
+      fields,
+      formStyle,
+      whatsappNumber,
+      createdAt: new Date().toISOString()
+    };
+    
+    // Save to localStorage (in a real app, this would be saved to a database)
+    const savedForms = JSON.parse(localStorage.getItem('savedForms') || '[]');
+    savedForms.push({ ...formData, id: Date.now().toString() });
+    localStorage.setItem('savedForms', JSON.stringify(savedForms));
+    
+    toast({
+      title: "Form Saved!",
+      description: "Your form has been saved successfully.",
+    });
   };
 
-  const tabs = [
-    { id: 'fields', label: 'Fields', icon: Layout },
-    { id: 'style', label: 'Style', icon: Palette },
-    { id: 'ai', label: 'AI Agent', icon: Bot },
-    { id: 'preview', label: 'Preview', icon: Eye },
-    { id: 'code', label: 'Code', icon: Code }
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header with WhatsX Branding */}
-      <header className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Link to="/">
-                <Button variant="ghost" size="sm" className="min-h-[44px] min-w-[44px] text-white hover:bg-white/20">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  <span className="hidden sm:inline">Back</span>
-                </Button>
-              </Link>
-              <div className="flex items-center space-x-2">
-                <Sparkles className="w-6 h-6 text-blue-200" />
-                <h1 className="text-xl md:text-2xl font-bold">WhatsX Form Builder</h1>
+    <>
+      <SEOHead 
+        title="Form Builder - WhatsX | Create Custom Forms for WhatsApp"
+        description="Build custom forms that integrate seamlessly with WhatsApp. Drag-and-drop interface, real-time preview, and instant messaging integration."
+        keywords="form builder, WhatsApp forms, custom forms, lead generation, contact forms"
+      />
+      
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        {/* Header */}
+        <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+            <Link to="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <MessageCircle className="w-5 h-5 text-white" />
               </div>
-            </div>
+              <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                WhatsX
+              </span>
+            </Link>
             
-            <div className="flex items-center space-x-2">
-              {aiAgentConfig.enabled && (
-                <Badge className="bg-white/20 text-white border-white/30">
-                  <Bot className="w-3 h-3 mr-1" />
-                  AI Enabled
-                </Badge>
-              )}
+            <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowMobilePreview(!showMobilePreview)}
-                className="md:hidden min-h-[44px] min-w-[44px] text-white hover:bg-white/20"
+                onClick={() => setShowPreview(!showPreview)}
+                className="lg:hidden"
               >
-                <Smartphone className="w-4 h-4" />
+                {showPreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <div className="container mx-auto px-4 py-4 md:py-6">
-        {/* Mobile Layout */}
-        <div className="block lg:hidden">
-          {/* Form Settings Card - Mobile */}
-          <Card className="mb-4 border-2 border-gradient-to-r from-blue-100 to-purple-100">
-            <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-purple-50">
-              <CardTitle className="flex items-center text-lg">
-                <Settings className="w-5 h-5 mr-2 text-blue-600" />
-                Form Settings
-                <BrandWatermark size="sm" position="inline" className="ml-auto" />
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="formTitle-mobile">Form Title</Label>
-                <Input
-                  id="formTitle-mobile"
-                  value={formTitle}
-                  onChange={(e) => setFormTitle(e.target.value)}
-                  placeholder="Enter form title"
-                  className="text-base"
-                />
-              </div>
-              <div>
-                <Label htmlFor="whatsappNumber-mobile">WhatsApp Number</Label>
-                <Input
-                  id="whatsappNumber-mobile"
-                  value={whatsappNumber}
-                  onChange={(e) => setWhatsappNumber(e.target.value)}
-                  placeholder="1234567890"
-                  className="text-base"
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Mobile Tab Navigation */}
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            {tabs.slice(0, 3).map((tab) => (
-              <Button
-                key={tab.id}
-                variant={activeTab === tab.id ? 'default' : 'outline'}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center justify-center py-3 text-sm min-h-[44px] ${
-                  activeTab === tab.id 
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
-                    : 'border-blue-200 text-blue-700 hover:bg-blue-50'
-                }`}
-              >
-                <tab.icon className="w-4 h-4 mr-1" />
-                {tab.label}
+              
+              <Button onClick={handleSave} variant="outline" size="sm">
+                <Save className="w-4 h-4 mr-2" />
+                Save
               </Button>
-            ))}
-          </div>
-          <div className="grid grid-cols-2 gap-2 mb-4">
-            {tabs.slice(3).map((tab) => (
-              <Button
-                key={tab.id}
-                variant={activeTab === tab.id ? 'default' : 'outline'}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center justify-center py-3 text-sm min-h-[44px] ${
-                  activeTab === tab.id 
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
-                    : 'border-blue-200 text-blue-700 hover:bg-blue-50'
-                }`}
-              >
-                <tab.icon className="w-4 h-4 mr-2" />
-                {tab.label}
-              </Button>
-            ))}
-          </div>
-
-          {/* Mobile Tab Content */}
-          <div className="space-y-4">
-            {activeTab === 'fields' && (
-              <FormFieldEditor
-                fields={fields}
-                onAddField={addField}
-                onUpdateField={updateField}
-                onRemoveField={removeField}
-              />
-            )}
-
-            {activeTab === 'style' && (
-              <StyleEditor
-                formStyle={formStyle}
-                onUpdateStyle={updateStyle}
-              />
-            )}
-
-            {activeTab === 'ai' && (
-              <AIAgentSetup
-                config={aiAgentConfig}
-                onUpdateConfig={updateAiConfig}
-              />
-            )}
-
-            {activeTab === 'preview' && (
-              <FormPreview
-                title={formTitle}
-                fields={fields}
-                formStyle={formStyle}
-                whatsappNumber={whatsappNumber}
-              />
-            )}
-
-            {activeTab === 'code' && (
-              <CodeGenerator
-                title={formTitle}
-                fields={fields}
-                formStyle={formStyle}
-                whatsappNumber={whatsappNumber}
-                aiAgentConfig={aiAgentConfig}
-              />
-            )}
-          </div>
-
-          {/* Mobile Preview Toggle */}
-          {showMobilePreview && (
-            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-lg p-4 max-w-sm w-full max-h-[90vh] overflow-auto">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold">Mobile Preview</h3>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowMobilePreview(false)}
-                    className="min-h-[44px] min-w-[44px]"
-                  >
-                    ×
-                  </Button>
-                </div>
-                <FormPreview
-                  title={formTitle}
-                  fields={fields}
-                  formStyle={formStyle}
-                  whatsappNumber={whatsappNumber}
-                  compact
-                />
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Desktop Layout */}
-        <div className="hidden lg:grid lg:grid-cols-3 lg:gap-6">
-          {/* Left Panel - Builder */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Form Settings */}
-            <Card className="border-2 border-gradient-to-r from-blue-100 to-purple-100">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Settings className="w-5 h-5 mr-2 text-blue-600" />
-                    Form Settings
-                  </div>
-                  <BrandWatermark size="sm" position="inline" />
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="formTitle">Form Title</Label>
-                  <Input
-                    id="formTitle"
-                    value={formTitle}
-                    onChange={(e) => setFormTitle(e.target.value)}
-                    placeholder="Enter form title"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="whatsappNumber">WhatsApp Number</Label>
-                  <Input
-                    id="whatsappNumber"
-                    value={whatsappNumber}
-                    onChange={(e) => setWhatsappNumber(e.target.value)}
-                    placeholder="1234567890"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Desktop Tabs */}
-            <div className="flex space-x-1 bg-gradient-to-r from-blue-50 to-purple-50 p-1 rounded-lg border border-blue-200">
-              {tabs.map((tab) => (
-                <Button
-                  key={tab.id}
-                  variant={activeTab === tab.id ? 'default' : 'ghost'}
-                  size="sm"
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex-1 ${
-                    activeTab === tab.id 
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md' 
-                      : 'text-blue-700 hover:bg-white/60'
-                  }`}
-                >
-                  <tab.icon className="w-4 h-4 mr-2" />
-                  {tab.label}
+              
+              <Link to="/">
+                <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                  <ArrowLeft className="w-4 h-4" />
+                  <span className="hidden sm:inline">Back</span>
                 </Button>
-              ))}
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        <div className="container mx-auto px-4 py-6 max-w-7xl">
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Left Panel - Form Builder */}
+            <div className={`space-y-6 ${showPreview ? 'hidden lg:block' : ''}`}>
+              {/* Form Settings */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Form Settings</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="formTitle">Form Title</Label>
+                    <Input
+                      id="formTitle"
+                      value={formTitle}
+                      onChange={(e) => setFormTitle(e.target.value)}
+                      placeholder="Enter form title"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="whatsappNumber">WhatsApp Number</Label>
+                    <Input
+                      id="whatsappNumber"
+                      value={whatsappNumber}
+                      onChange={(e) => setWhatsappNumber(e.target.value)}
+                      placeholder="e.g., +1234567890"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Form Builder Tabs */}
+              <Tabs defaultValue="fields" className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="fields">Fields</TabsTrigger>
+                  <TabsTrigger value="style">Style</TabsTrigger>
+                  <TabsTrigger value="export">Export</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="fields">
+                  <FormFieldEditor
+                    fields={fields}
+                    onAddField={addField}
+                    onUpdateField={updateField}
+                    onRemoveField={removeField}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="style">
+                  <StyleEditor
+                    formStyle={formStyle}
+                    onUpdateStyle={updateStyle}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="export">
+                  <CodeGenerator
+                    title={formTitle}
+                    fields={fields}
+                    formStyle={formStyle}
+                    whatsappNumber={whatsappNumber}
+                  />
+                </TabsContent>
+              </Tabs>
             </div>
 
-            {/* Desktop Tab Content */}
-            {activeTab === 'fields' && (
-              <FormFieldEditor
-                fields={fields}
-                onAddField={addField}
-                onUpdateField={updateField}
-                onRemoveField={removeField}
-              />
-            )}
-
-            {activeTab === 'style' && (
-              <StyleEditor
-                formStyle={formStyle}
-                onUpdateStyle={updateStyle}
-              />
-            )}
-
-            {activeTab === 'ai' && (
-              <AIAgentSetup
-                config={aiAgentConfig}
-                onUpdateConfig={updateAiConfig}
-              />
-            )}
-
-            {activeTab === 'preview' && (
-              <FormPreview
-                title={formTitle}
-                fields={fields}
-                formStyle={formStyle}
-                whatsappNumber={whatsappNumber}
-              />
-            )}
-
-            {activeTab === 'code' && (
-              <CodeGenerator
-                title={formTitle}
-                fields={fields}
-                formStyle={formStyle}
-                whatsappNumber={whatsappNumber}
-                aiAgentConfig={aiAgentConfig}
-              />
-            )}
-          </div>
-
-          {/* Right Panel - Live Preview */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24">
-              <Card className="border-2 border-gradient-to-r from-blue-100 to-purple-100">
-                <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
-                  <CardTitle className="text-sm flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Eye className="w-4 h-4 mr-2 text-blue-600" />
+            {/* Right Panel - Live Preview */}
+            <div className={`${!showPreview ? 'hidden lg:block' : ''}`}>
+              <div className="sticky top-24">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
                       Live Preview
-                    </div>
-                    {aiAgentConfig.enabled && (
-                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                        <Bot className="w-3 h-3 mr-1" />
-                        AI
-                      </Badge>
-                    )}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-gray-100 p-4 rounded-lg">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowPreview(!showPreview)}
+                        className="lg:hidden"
+                      >
+                        <EyeOff className="w-4 h-4" />
+                      </Button>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
                     <FormPreview
                       title={formTitle}
                       fields={fields}
                       formStyle={formStyle}
                       whatsappNumber={whatsappNumber}
-                      compact
                     />
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Brand Watermark */}
-      <BrandWatermark />
-    </div>
+    </>
   );
 };
 

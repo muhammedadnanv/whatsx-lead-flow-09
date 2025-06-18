@@ -1,11 +1,30 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, MessageCircle, Zap, Bot, ShoppingCart, Briefcase, Heart, Users, Calendar, FileText, Star, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from "react";
+import { FormPreview } from "@/components/form-builder/FormPreview";
+import { FormField, FormStyle } from "@/pages/FormBuilder";
+import { useToast } from "@/hooks/use-toast";
 
 const Templates = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
+
+  const defaultFormStyle: FormStyle = {
+    primaryColor: "#3b82f6",
+    backgroundColor: "#ffffff",
+    textColor: "#1f2937",
+    fontFamily: "Inter, sans-serif",
+    borderRadius: "8px",
+    spacing: "1rem",
+    buttonText: "Send to WhatsApp"
+  };
+
   const templateCategories = [
     {
       id: "lead-generation",
@@ -13,22 +32,41 @@ const Templates = () => {
       icon: Zap,
       templates: [
         {
+          id: "contact-form",
           name: "Contact Form",
           description: "Simple contact form with name, email, and message fields",
           preview: "contact-form.jpg",
-          popular: true
+          popular: true,
+          fields: [
+            { id: "1", type: "text" as const, label: "Full Name", required: true, placeholder: "Enter your full name" },
+            { id: "2", type: "email" as const, label: "Email Address", required: true, placeholder: "Enter your email" },
+            { id: "3", type: "textarea" as const, label: "Message", required: true, placeholder: "How can we help you?" }
+          ]
         },
         {
+          id: "quote-request",
           name: "Quote Request",
           description: "Detailed quote request form for service providers",
           preview: "quote-request.jpg",
-          popular: false
+          popular: false,
+          fields: [
+            { id: "1", type: "text" as const, label: "Company Name", required: true, placeholder: "Your company name" },
+            { id: "2", type: "email" as const, label: "Email", required: true, placeholder: "Business email" },
+            { id: "3", type: "select" as const, label: "Service Type", required: true, options: ["Web Development", "Mobile App", "E-commerce", "Consulting"] },
+            { id: "4", type: "textarea" as const, label: "Project Details", required: true, placeholder: "Describe your project requirements" }
+          ]
         },
         {
+          id: "newsletter-signup",
           name: "Newsletter Signup",
           description: "Clean newsletter subscription form with email validation",
           preview: "newsletter.jpg",
-          popular: true
+          popular: true,
+          fields: [
+            { id: "1", type: "text" as const, label: "First Name", required: true, placeholder: "Your first name" },
+            { id: "2", type: "email" as const, label: "Email Address", required: true, placeholder: "Enter your email" },
+            { id: "3", type: "checkbox" as const, label: "I agree to receive marketing emails", required: true }
+          ]
         }
       ]
     },
@@ -38,22 +76,44 @@ const Templates = () => {
       icon: ShoppingCart,
       templates: [
         {
+          id: "product-inquiry",
           name: "Product Inquiry",
           description: "Product inquiry form with product selection and details",
           preview: "product-inquiry.jpg",
-          popular: true
+          popular: true,
+          fields: [
+            { id: "1", type: "text" as const, label: "Name", required: true, placeholder: "Your name" },
+            { id: "2", type: "email" as const, label: "Email", required: true, placeholder: "Your email" },
+            { id: "3", type: "select" as const, label: "Product", required: true, options: ["Laptop", "Smartphone", "Tablet", "Accessories"] },
+            { id: "4", type: "textarea" as const, label: "Questions", required: false, placeholder: "Any specific questions?" }
+          ]
         },
         {
+          id: "order-form",
           name: "Order Form",
           description: "Complete order form with quantity and shipping options",
           preview: "order-form.jpg",
-          popular: false
+          popular: false,
+          fields: [
+            { id: "1", type: "text" as const, label: "Customer Name", required: true, placeholder: "Full name" },
+            { id: "2", type: "email" as const, label: "Email", required: true, placeholder: "Email address" },
+            { id: "3", type: "select" as const, label: "Product", required: true, options: ["Product A", "Product B", "Product C"] },
+            { id: "4", type: "text" as const, label: "Quantity", required: true, placeholder: "How many?" },
+            { id: "5", type: "textarea" as const, label: "Shipping Address", required: true, placeholder: "Complete address" }
+          ]
         },
         {
+          id: "customer-feedback",
           name: "Customer Feedback",
           description: "Product review and feedback collection form",
           preview: "feedback.jpg",
-          popular: false
+          popular: false,
+          fields: [
+            { id: "1", type: "text" as const, label: "Name", required: true, placeholder: "Your name" },
+            { id: "2", type: "email" as const, label: "Email", required: true, placeholder: "Your email" },
+            { id: "3", type: "radio" as const, label: "Rating", required: true, options: ["1 Star", "2 Stars", "3 Stars", "4 Stars", "5 Stars"] },
+            { id: "4", type: "textarea" as const, label: "Feedback", required: true, placeholder: "Share your experience" }
+          ]
         }
       ]
     },
@@ -63,22 +123,45 @@ const Templates = () => {
       icon: Briefcase,
       templates: [
         {
+          id: "consultation-booking",
           name: "Consultation Booking",
           description: "Professional consultation booking with time slots",
           preview: "consultation.jpg",
-          popular: true
+          popular: true,
+          fields: [
+            { id: "1", type: "text" as const, label: "Full Name", required: true, placeholder: "Your full name" },
+            { id: "2", type: "email" as const, label: "Email", required: true, placeholder: "Email address" },
+            { id: "3", type: "select" as const, label: "Service", required: true, options: ["Business Consulting", "Legal Advice", "Financial Planning", "Marketing Strategy"] },
+            { id: "4", type: "select" as const, label: "Preferred Time", required: true, options: ["Morning (9-12)", "Afternoon (12-5)", "Evening (5-8)"] },
+            { id: "5", type: "textarea" as const, label: "Brief Description", required: true, placeholder: "What would you like to discuss?" }
+          ]
         },
         {
+          id: "service-request",
           name: "Service Request",
           description: "General service request form with detailed requirements",
           preview: "service-request.jpg",
-          popular: false
+          popular: false,
+          fields: [
+            { id: "1", type: "text" as const, label: "Company Name", required: true, placeholder: "Your company" },
+            { id: "2", type: "email" as const, label: "Contact Email", required: true, placeholder: "Business email" },
+            { id: "3", type: "select" as const, label: "Service Category", required: true, options: ["IT Support", "Maintenance", "Consulting", "Training"] },
+            { id: "4", type: "textarea" as const, label: "Requirements", required: true, placeholder: "Detailed service requirements" }
+          ]
         },
         {
+          id: "partnership-inquiry",
           name: "Partnership Inquiry",
           description: "Business partnership and collaboration inquiry form",
           preview: "partnership.jpg",
-          popular: false
+          popular: false,
+          fields: [
+            { id: "1", type: "text" as const, label: "Company Name", required: true, placeholder: "Your company name" },
+            { id: "2", type: "text" as const, label: "Contact Person", required: true, placeholder: "Your name" },
+            { id: "3", type: "email" as const, label: "Email", required: true, placeholder: "Business email" },
+            { id: "4", type: "select" as const, label: "Partnership Type", required: true, options: ["Strategic Alliance", "Joint Venture", "Supplier Partnership", "Technology Partnership"] },
+            { id: "5", type: "textarea" as const, label: "Proposal Details", required: true, placeholder: "Describe your partnership proposal" }
+          ]
         }
       ]
     },
@@ -88,26 +171,73 @@ const Templates = () => {
       icon: Calendar,
       templates: [
         {
+          id: "event-registration",
           name: "Event Registration",
           description: "Event registration form with attendee details",
           preview: "event-registration.jpg",
-          popular: true
+          popular: true,
+          fields: [
+            { id: "1", type: "text" as const, label: "Full Name", required: true, placeholder: "Your full name" },
+            { id: "2", type: "email" as const, label: "Email", required: true, placeholder: "Email address" },
+            { id: "3", type: "text" as const, label: "Company/Organization", required: false, placeholder: "Company name" },
+            { id: "4", type: "select" as const, label: "Ticket Type", required: true, options: ["General Admission", "VIP", "Student", "Group"] },
+            { id: "5", type: "textarea" as const, label: "Special Requirements", required: false, placeholder: "Dietary restrictions, accessibility needs, etc." }
+          ]
         },
         {
+          id: "appointment-booking",
           name: "Appointment Booking",
           description: "Simple appointment booking with date and time selection",
           preview: "appointment.jpg",
-          popular: true
+          popular: true,
+          fields: [
+            { id: "1", type: "text" as const, label: "Name", required: true, placeholder: "Your name" },
+            { id: "2", type: "email" as const, label: "Email", required: true, placeholder: "Email address" },
+            { id: "3", type: "select" as const, label: "Service", required: true, options: ["Consultation", "Follow-up", "New Patient", "Emergency"] },
+            { id: "4", type: "select" as const, label: "Preferred Date", required: true, options: ["This Week", "Next Week", "Flexible"] },
+            { id: "5", type: "textarea" as const, label: "Notes", required: false, placeholder: "Additional information" }
+          ]
         },
         {
+          id: "workshop-signup",
           name: "Workshop Signup",
           description: "Workshop registration with skill level and preferences",
           preview: "workshop.jpg",
-          popular: false
+          popular: false,
+          fields: [
+            { id: "1", type: "text" as const, label: "Full Name", required: true, placeholder: "Your full name" },
+            { id: "2", type: "email" as const, label: "Email", required: true, placeholder: "Email address" },
+            { id: "3", type: "select" as const, label: "Experience Level", required: true, options: ["Beginner", "Intermediate", "Advanced"] },
+            { id: "4", type: "select" as const, label: "Workshop Topic", required: true, options: ["Digital Marketing", "Web Development", "Data Science", "Design Thinking"] },
+            { id: "5", type: "textarea" as const, label: "Learning Goals", required: false, placeholder: "What do you hope to learn?" }
+          ]
         }
       ]
     }
   ];
+
+  const handleUseTemplate = (template: any) => {
+    // Store template data in localStorage for the form builder
+    const templateData = {
+      title: template.name,
+      fields: template.fields,
+      formStyle: defaultFormStyle
+    };
+    
+    localStorage.setItem('selectedTemplate', JSON.stringify(templateData));
+    
+    toast({
+      title: "Template Selected!",
+      description: `${template.name} template is ready to customize.`,
+    });
+    
+    // Navigate to form builder with template
+    navigate('/form-builder?template=' + template.id);
+  };
+
+  const handlePreviewTemplate = (template: any) => {
+    setSelectedTemplate(template);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -169,12 +299,39 @@ const Templates = () => {
                     <CardContent>
                       <p className="text-gray-600 mb-4">{template.description}</p>
                       <div className="flex space-x-2">
-                        <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 flex-1">
+                        <Button 
+                          size="sm" 
+                          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 flex-1"
+                          onClick={() => handleUseTemplate(template)}
+                        >
                           Use Template
                         </Button>
-                        <Button size="sm" variant="outline" className="border-blue-200 text-blue-700 hover:bg-blue-50">
-                          <Eye className="w-4 h-4" />
-                        </Button>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="border-blue-200 text-blue-700 hover:bg-blue-50"
+                              onClick={() => handlePreviewTemplate(template)}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-md">
+                            <DialogHeader>
+                              <DialogTitle>{template.name} Preview</DialogTitle>
+                            </DialogHeader>
+                            <div className="mt-4">
+                              <FormPreview
+                                title={template.name}
+                                fields={template.fields}
+                                formStyle={defaultFormStyle}
+                                whatsappNumber="1234567890"
+                                compact={false}
+                              />
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </CardContent>
                   </Card>
