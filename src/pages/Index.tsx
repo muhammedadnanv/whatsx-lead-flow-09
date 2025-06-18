@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Zap, Palette, Code, MessageCircle, Smartphone, Globe, Bot, Sparkles, CheckCircle, Star, Users, Building, ShoppingCart, Briefcase, Heart, UserCheck, Monitor, Layers } from "lucide-react";
+import { ArrowRight, Zap, Palette, Code, MessageCircle, Smartphone, Globe, Bot, Sparkles, CheckCircle, Star, Users, Building, ShoppingCart, Briefcase, Heart, UserCheck, Monitor, Layers, Play } from "lucide-react";
 import { Link } from "react-router-dom";
+import { VideoPopup } from "@/components/VideoPopup";
 
 const Index = () => {
+  const videoUrl = "https://www.loom.com/share/c1f4cf1f5d5b4c4d9c5e745032b2a081?sid=666100aa-4de5-4d25-92fc-8f4605f7b862";
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Navigation */}
@@ -18,6 +21,13 @@ const Index = () => {
               </span>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
+              <VideoPopup 
+                videoUrl={videoUrl}
+                buttonText="Watch Demo"
+                buttonVariant="ghost"
+                buttonSize="sm"
+                className="text-blue-600 hover:text-blue-800 hidden sm:flex"
+              />
               <Link to="/ai-agent">
                 <Button variant="ghost" className="text-blue-600 hover:text-blue-800 text-sm sm:text-base p-2 sm:p-3">
                   <Bot className="w-4 h-4 mr-1 sm:mr-2" />
@@ -55,7 +65,7 @@ const Index = () => {
             No coding required - just drag, drop, and deploy with AI assistance.
           </p>
           
-          <div className="button-group flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-12">
+          <div className="button-group flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8">
             <Link to="/form-builder" className="w-full sm:w-auto">
               <Button size="lg" className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6">
                 <Zap className="w-4 sm:w-5 h-4 sm:h-5 mr-2" />
@@ -76,6 +86,17 @@ const Index = () => {
                 <Sparkles className="w-3 sm:w-4 h-3 sm:h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-purple-600" />
               </Button>
             </Link>
+          </div>
+
+          {/* Video Demo Button */}
+          <div className="mb-8 sm:mb-12">
+            <VideoPopup 
+              videoUrl={videoUrl}
+              buttonText="Watch How It Works"
+              buttonVariant="outline"
+              buttonSize="lg"
+              className="group relative border-2 border-gray-200 text-gray-700 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50 hover:border-blue-300 text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 transition-all duration-300 hover:shadow-lg hover:scale-105"
+            />
           </div>
 
           {/* Trust Indicators */}
@@ -103,9 +124,15 @@ const Index = () => {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 text-gray-800">
               Everything You Need to Create Amazing Forms
             </h2>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mobile-text">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mobile-text mb-6">
               Powerful features designed to make form building simple, fast, and effective
             </p>
+            <VideoPopup 
+              videoUrl={videoUrl}
+              buttonText="See It In Action"
+              buttonVariant="outline"
+              className="border-blue-200 text-blue-700 hover:bg-blue-50"
+            />
           </div>
 
           <div className="card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
