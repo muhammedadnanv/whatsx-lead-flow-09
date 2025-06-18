@@ -222,9 +222,18 @@ document.addEventListener('keydown', function(e) {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <Link to="/form-builder">
+              <Button 
+                size="lg" 
+                className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-lg px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                Create Form Builder
+              </Button>
+            </Link>
             <Button 
               size="lg" 
-              className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-lg px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+              className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-lg px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
               onClick={() => setIsFormVisible(!isFormVisible)}
             >
               <Play className="w-5 h-5 mr-2" />
