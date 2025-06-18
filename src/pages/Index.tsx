@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -323,7 +322,19 @@ const Index = () => {
             {[
               'Shopify', 'Webflow', 'Framer', 'Squarespace', 'Wix',
               'WordPress', 'Elementor', 'WooCommerce', 'HTML', 'Weebly',
-              'Joomla', 'Blogger', 'Drupal', 'Magento', 'BigCommerce'
+              'Joomla', 'Blogger', 'Drupal', 'Magento', 'BigCommerce',
+              'Ghost', 'Gatsby', 'Next.js', 'React', 'Vue.js',
+              'Angular', 'Svelte', 'Nuxt.js', 'Astro', 'Hugo',
+              'Jekyll', 'Eleventy', 'Gridsome', 'Sapper', 'Remix',
+              'SvelteKit', 'Vite', 'Parcel', 'Webpack', 'Rollup',
+              'Bubble', 'Notion', 'Carrd', 'Linktree', 'Beehiiv',
+              'ConvertKit', 'Mailchimp', 'Substack', 'Medium', 'Dev.to',
+              'Hashnode', 'Gumroad', 'Teachable', 'Thinkific', 'Kajabi',
+              'ClickFunnels', 'Leadpages', 'Unbounce', 'Instapage', 'GetResponse',
+              'ActiveCampaign', 'HubSpot', 'Salesforce', 'Pipedrive', 'Zoho',
+              'Monday.com', 'Airtable', 'Typeform', 'JotForm', 'Google Forms',
+              'Microsoft Forms', 'Formstack', 'Gravity Forms', 'Ninja Forms', 'Contact Form 7',
+              'WPForms', 'Caldera Forms', 'Formidable Forms', 'Happy Forms', 'Form Maker'
             ].map((platform) => (
               <Badge 
                 key={platform}
@@ -333,7 +344,7 @@ const Index = () => {
               </Badge>
             ))}
             <Badge className="bg-gradient-to-r from-gray-50 to-gray-100 text-gray-600 border-gray-200 px-4 py-2 text-sm font-medium">
-              ...and more
+              ...and 100+ more
             </Badge>
           </div>
 
