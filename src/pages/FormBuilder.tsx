@@ -5,11 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Plus, Eye, Code, Palette, Layout, Settings, Smartphone, Sparkles } from "lucide-react";
+import { ArrowLeft, Plus, Eye, Code, Palette, Layout, Settings, Smartphone, Sparkles, Bot } from "lucide-react";
 import { FormFieldEditor } from "@/components/form-builder/FormFieldEditor";
 import { FormPreview } from "@/components/form-builder/FormPreview";
 import { StyleEditor } from "@/components/form-builder/StyleEditor";
 import { CodeGenerator } from "@/components/form-builder/CodeGenerator";
+import { AIAgentSetup, AIAgentConfig } from "@/components/form-builder/AIAgentSetup";
 import { BrandWatermark } from "@/components/form-builder/BrandWatermark";
 import { Link } from "react-router-dom";
 
@@ -33,10 +34,21 @@ export interface FormStyle {
 }
 
 const FormBuilder = () => {
-  const [activeTab, setActiveTab] = useState<'fields' | 'style' | 'preview' | 'code'>('fields');
+  const [activeTab, setActiveTab] = useState<'fields' | 'style' | 'ai' | 'preview' | 'code'>('fields');
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [formTitle, setFormTitle] = useState("Get In Touch!");
   const [whatsappNumber, setWhatsappNumber] = useState("1234567890");
+  
+  const [aiAgentConfig, setAiAgentConfig] = useState<AIAgentConfig>({
+    enabled: false,
+    geminiApiKey: '',
+    agentName: 'WhatsX Assistant',
+    systemPrompt: 'You are a helpful customer support assistant for WhatsX forms. Help users with their questions about filling out the form and provide relevant information about our services.',
+    welcomeMessage: 'Hi! I\'m your WhatsX assistant. How can I help you with this form today?',
+    temperature: 0.7,
+    maxTokens: 512
+  });
+
   const [fields, setFields] = useState<FormField[]>([
     {
       id: '1',
@@ -97,9 +109,14 @@ const FormBuilder = () => {
     setFormStyle({ ...formStyle, ...updates });
   };
 
+  const updateAiConfig = (updates: Partial<AIAgentConfig>) => {
+    setAiAgentConfig({ ...aiAgentConfig, ...updates });
+  };
+
   const tabs = [
     { id: 'fields', label: 'Fields', icon: Layout },
     { id: 'style', label: 'Style', icon: Palette },
+    { id: 'ai', label: 'AI Agent', icon: Bot },
     { id: 'preview', label: 'Preview', icon: Eye },
     { id: 'code', label: 'Code', icon: Code }
   ];
@@ -124,6 +141,12 @@ const FormBuilder = () => {
             </div>
             
             <div className="flex items-center space-x-2">
+              {aiAgentConfig.enabled && (
+                <Badge className="bg-white/20 text-white border-white/30">
+                  <Bot className="w-3 h-3 mr-1" />
+                  AI Enabled
+                </Badge>
+              )}
               <Button
                 variant="ghost"
                 size="sm"
@@ -174,8 +197,25 @@ const FormBuilder = () => {
           </Card>
 
           {/* Mobile Tab Navigation */}
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            {tabs.slice(0, 3).map((tab) => (
+              <Button
+                key={tab.id}
+                variant={activeTab === tab.id ? 'default' : 'outline'}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center justify-center py-3 text-sm min-h-[44px] ${
+                  activeTab === tab.id 
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
+                    : 'border-blue-200 text-blue-700 hover:bg-blue-50'
+                }`}
+              >
+                <tab.icon className="w-4 h-4 mr-1" />
+                {tab.label}
+              </Button>
+            ))}
+          </div>
           <div className="grid grid-cols-2 gap-2 mb-4">
-            {tabs.map((tab) => (
+            {tabs.slice(3).map((tab) => (
               <Button
                 key={tab.id}
                 variant={activeTab === tab.id ? 'default' : 'outline'}
@@ -210,6 +250,13 @@ const FormBuilder = () => {
               />
             )}
 
+            {activeTab === 'ai' && (
+              <AIAgentSetup
+                config={aiAgentConfig}
+                onUpdateConfig={updateAiConfig}
+              />
+            )}
+
             {activeTab === 'preview' && (
               <FormPreview
                 title={formTitle}
@@ -225,6 +272,7 @@ const FormBuilder = () => {
                 fields={fields}
                 formStyle={formStyle}
                 whatsappNumber={whatsappNumber}
+                aiAgentConfig={aiAgentConfig}
               />
             )}
           </div>
@@ -330,6 +378,13 @@ const FormBuilder = () => {
               />
             )}
 
+            {activeTab === 'ai' && (
+              <AIAgentSetup
+                config={aiAgentConfig}
+                onUpdateConfig={updateAiConfig}
+              />
+            )}
+
             {activeTab === 'preview' && (
               <FormPreview
                 title={formTitle}
@@ -345,6 +400,7 @@ const FormBuilder = () => {
                 fields={fields}
                 formStyle={formStyle}
                 whatsappNumber={whatsappNumber}
+                aiAgentConfig={aiAgentConfig}
               />
             )}
           </div>
@@ -359,6 +415,12 @@ const FormBuilder = () => {
                       <Eye className="w-4 h-4 mr-2 text-blue-600" />
                       Live Preview
                     </div>
+                    {aiAgentConfig.enabled && (
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                        <Bot className="w-3 h-3 mr-1" />
+                        AI
+                      </Badge>
+                    )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
