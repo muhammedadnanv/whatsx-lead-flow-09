@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowLeft, MessageCircle, Save, Download, Eye, EyeOff } from "lucide-react";
@@ -12,7 +11,7 @@ import { FormPreview } from "@/components/form-builder/FormPreview";
 import { StyleEditor } from "@/components/form-builder/StyleEditor";
 import { CodeGenerator } from "@/components/form-builder/CodeGenerator";
 import { useToast } from "@/hooks/use-toast";
-import { SEOHead } from "@/components/SEOHead";
+import SEOHead from "@/components/SEOHead";
 
 export interface FormField {
   id: string;
