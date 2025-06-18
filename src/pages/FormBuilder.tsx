@@ -5,12 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Plus, Eye, Code, Palette, Layout, Settings, Smartphone, Bot, Sparkles } from "lucide-react";
+import { ArrowLeft, Plus, Eye, Code, Palette, Layout, Settings, Smartphone, Sparkles } from "lucide-react";
 import { FormFieldEditor } from "@/components/form-builder/FormFieldEditor";
 import { FormPreview } from "@/components/form-builder/FormPreview";
 import { StyleEditor } from "@/components/form-builder/StyleEditor";
 import { CodeGenerator } from "@/components/form-builder/CodeGenerator";
-import { AIAgentSetup, AIAgentConfig } from "@/components/form-builder/AIAgentSetup";
 import { BrandWatermark } from "@/components/form-builder/BrandWatermark";
 import { Link } from "react-router-dom";
 
@@ -34,7 +33,7 @@ export interface FormStyle {
 }
 
 const FormBuilder = () => {
-  const [activeTab, setActiveTab] = useState<'fields' | 'style' | 'preview' | 'code' | 'ai-agent'>('fields');
+  const [activeTab, setActiveTab] = useState<'fields' | 'style' | 'preview' | 'code'>('fields');
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [formTitle, setFormTitle] = useState("Get In Touch!");
   const [whatsappNumber, setWhatsappNumber] = useState("1234567890");
@@ -72,16 +71,6 @@ const FormBuilder = () => {
     buttonText: 'Send to WhatsApp'
   });
 
-  const [aiAgentConfig, setAiAgentConfig] = useState<AIAgentConfig>({
-    enabled: false,
-    geminiApiKey: '',
-    agentName: 'WhatsX Assistant',
-    systemPrompt: 'You are a helpful customer support assistant for WhatsX forms. Help users with their questions about filling out the form and provide relevant information.',
-    welcomeMessage: 'Hi! I\'m your WhatsX assistant. How can I help you with this form today?',
-    temperature: 0.7,
-    maxTokens: 512
-  });
-
   const addField = (type: FormField['type']) => {
     const newField: FormField = {
       id: Date.now().toString(),
@@ -108,14 +97,9 @@ const FormBuilder = () => {
     setFormStyle({ ...formStyle, ...updates });
   };
 
-  const updateAiAgentConfig = (updates: Partial<AIAgentConfig>) => {
-    setAiAgentConfig({ ...aiAgentConfig, ...updates });
-  };
-
   const tabs = [
     { id: 'fields', label: 'Fields', icon: Layout },
     { id: 'style', label: 'Style', icon: Palette },
-    { id: 'ai-agent', label: 'AI Agent', icon: Bot },
     { id: 'preview', label: 'Preview', icon: Eye },
     { id: 'code', label: 'Code', icon: Code }
   ];
@@ -140,10 +124,6 @@ const FormBuilder = () => {
             </div>
             
             <div className="flex items-center space-x-2">
-              <Badge className="bg-white/20 text-white border-white/30 hidden sm:inline-flex hover:bg-white/30">
-                <Bot className="w-3 h-3 mr-1" />
-                AI-Powered
-              </Badge>
               <Button
                 variant="ghost"
                 size="sm"
@@ -208,9 +188,6 @@ const FormBuilder = () => {
               >
                 <tab.icon className="w-4 h-4 mr-2" />
                 {tab.label}
-                {tab.id === 'ai-agent' && aiAgentConfig.enabled && (
-                  <Sparkles className="w-3 h-3 ml-1 text-yellow-300" />
-                )}
               </Button>
             ))}
           </div>
@@ -233,20 +210,12 @@ const FormBuilder = () => {
               />
             )}
 
-            {activeTab === 'ai-agent' && (
-              <AIAgentSetup
-                config={aiAgentConfig}
-                onUpdateConfig={updateAiAgentConfig}
-              />
-            )}
-
             {activeTab === 'preview' && (
               <FormPreview
                 title={formTitle}
                 fields={fields}
                 formStyle={formStyle}
                 whatsappNumber={whatsappNumber}
-                aiAgentConfig={aiAgentConfig}
               />
             )}
 
@@ -256,7 +225,6 @@ const FormBuilder = () => {
                 fields={fields}
                 formStyle={formStyle}
                 whatsappNumber={whatsappNumber}
-                aiAgentConfig={aiAgentConfig}
               />
             )}
           </div>
@@ -281,7 +249,6 @@ const FormBuilder = () => {
                   fields={fields}
                   formStyle={formStyle}
                   whatsappNumber={whatsappNumber}
-                  aiAgentConfig={aiAgentConfig}
                   compact
                 />
               </div>
@@ -342,9 +309,6 @@ const FormBuilder = () => {
                 >
                   <tab.icon className="w-4 h-4 mr-2" />
                   {tab.label}
-                  {tab.id === 'ai-agent' && aiAgentConfig.enabled && (
-                    <Sparkles className="w-3 h-3 ml-1 text-yellow-300" />
-                  )}
                 </Button>
               ))}
             </div>
@@ -366,20 +330,12 @@ const FormBuilder = () => {
               />
             )}
 
-            {activeTab === 'ai-agent' && (
-              <AIAgentSetup
-                config={aiAgentConfig}
-                onUpdateConfig={updateAiAgentConfig}
-              />
-            )}
-
             {activeTab === 'preview' && (
               <FormPreview
                 title={formTitle}
                 fields={fields}
                 formStyle={formStyle}
                 whatsappNumber={whatsappNumber}
-                aiAgentConfig={aiAgentConfig}
               />
             )}
 
@@ -389,7 +345,6 @@ const FormBuilder = () => {
                 fields={fields}
                 formStyle={formStyle}
                 whatsappNumber={whatsappNumber}
-                aiAgentConfig={aiAgentConfig}
               />
             )}
           </div>
@@ -404,12 +359,6 @@ const FormBuilder = () => {
                       <Eye className="w-4 h-4 mr-2 text-blue-600" />
                       Live Preview
                     </div>
-                    {aiAgentConfig.enabled && (
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-700">
-                        <Bot className="w-3 h-3 mr-1" />
-                        AI
-                      </Badge>
-                    )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -419,7 +368,6 @@ const FormBuilder = () => {
                       fields={fields}
                       formStyle={formStyle}
                       whatsappNumber={whatsappNumber}
-                      aiAgentConfig={aiAgentConfig}
                       compact
                     />
                   </div>
