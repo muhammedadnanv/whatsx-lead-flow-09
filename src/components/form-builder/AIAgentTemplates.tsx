@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,7 +5,7 @@ import {
   ShoppingBag, ShoppingCart, Store, Headphones, Gift, Star, Truck, MessageCircle, Users, ArrowRight, Zap, Heart, AlertTriangle,
   Stethoscope, GraduationCap, Home, Car, Utensils, Plane, Briefcase, Camera, Dumbbell, Palette, Music, Building,
   Shield, Calculator, Wrench, Leaf, Baby, PawPrint, Phone, MapPin, Clock, Coffee, Scissors, Gamepad2, Book,
-  Laptop, Hammer, TrendingUp, Target, Globe, Lightbulb, FileText, CreditCard, UserCheck, Smartphone
+  Laptop, Hammer, TrendingUp, Target, Globe, Lightbulb, FileText, CreditCard, UserCheck, Smartphone, Calendar
 } from "lucide-react";
 import { AIAgentConfig } from "./AIAgentSetup";
 
