@@ -26,11 +26,16 @@ export const BrandWatermark = ({
 
   return (
     <div className={`${positionClasses[position]} ${className}`}>
-      <div className={`flex items-center space-x-1 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 ${sizeClasses[size]}`}>
+      <a 
+        href="https://whatsx-nine.vercel.app/" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className={`flex items-center space-x-1 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer ${sizeClasses[size]}`}
+      >
         <Sparkles className="w-3 h-3 animate-pulse" />
         <span className="font-semibold tracking-wide">WhatsX</span>
         <span className="text-blue-100">Form Builder</span>
-      </div>
+      </a>
     </div>
   );
 };
