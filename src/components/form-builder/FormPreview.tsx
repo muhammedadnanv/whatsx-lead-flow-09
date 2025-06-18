@@ -10,6 +10,7 @@ import { MessageCircle, X, Bot, Send, Minimize2 } from "lucide-react";
 import { FormField, FormStyle } from "@/pages/FormBuilder";
 import { AIAgentConfig } from "./AIAgentSetup";
 import { BrandWatermark } from "./BrandWatermark";
+import { useToast } from "@/hooks/use-toast";
 
 interface FormPreviewProps {
   title: string;
@@ -34,6 +35,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [isAITyping, setIsAITyping] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +61,14 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
   };
 
   const sendChatMessage = async () => {
-    if (!chatInput.trim() || !aiAgentConfig?.geminiApiKey) return;
+    if (!chatInput.trim() || !aiAgentConfig?.geminiApiKey) {
+      toast({
+        title: "Error",
+        description: "Please enter a message and ensure API key is configured.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -73,7 +82,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
     setIsAITyping(true);
 
     try {
-      // Call Gemini API
+      console.log('Sending message to Gemini API...');
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${aiAgentConfig.geminiApiKey}`, {
         method: 'POST',
         headers: {
@@ -92,8 +101,11 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
         }),
       });
 
+      console.log('API Response status:', response.status);
+
       if (response.ok) {
         const data = await response.json();
+        console.log('API Response:', data);
         const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I couldn't process that request.";
         
         const aiMessage: ChatMessage = {
@@ -104,24 +116,56 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
         };
 
         setChatMessages(prev => [...prev, aiMessage]);
+        
+        toast({
+          title: "AI Response",
+          description: "Message sent successfully!",
+        });
       } else {
-        throw new Error('Failed to get AI response');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('API Error:', errorData);
+        throw new Error(`API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
       }
     } catch (error) {
+      console.error('Chat error:', error);
       const errorMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        text: "I'm sorry, I'm having trouble connecting right now. Please try again later.",
+        text: "I'm sorry, I'm having trouble connecting right now. Please check your API key and try again later.",
         isUser: false,
         timestamp: new Date()
       };
       setChatMessages(prev => [...prev, errorMessage]);
+      
+      toast({
+        title: "Connection Error",
+        description: "Please check your API key and try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsAITyping(false);
     }
   };
 
   const initializeChat = () => {
-    if (aiAgentConfig?.enabled && chatMessages.length === 0) {
+    if (!aiAgentConfig?.enabled) {
+      toast({
+        title: "AI Agent Disabled",
+        description: "Please enable the AI agent first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!aiAgentConfig?.geminiApiKey) {
+      toast({
+        title: "API Key Missing",
+        description: "Please configure your Gemini API key first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (chatMessages.length === 0) {
       const welcomeMessage: ChatMessage = {
         id: "welcome",
         text: aiAgentConfig.welcomeMessage,
@@ -131,6 +175,13 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
       setChatMessages([welcomeMessage]);
     }
     setShowAIChat(true);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendChatMessage();
+    }
   };
 
   const renderField = (field: FormField) => {
@@ -354,7 +405,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
                     placeholder="Ask me anything..."
-                    onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                    onKeyPress={handleKeyPress}
                     className="flex-1 text-sm"
                   />
                   <Button
@@ -495,7 +546,7 @@ export const FormPreview = ({ title, fields, formStyle, whatsappNumber, aiAgentC
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 placeholder="Ask me anything..."
-                onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                onKeyPress={handleKeyPress}
                 className="flex-1 text-sm"
               />
               <Button

@@ -71,60 +71,62 @@ ${radioOptions}
       }
     }).join('\n\n');
 
+    const formId = `whatsx-form-${Date.now()}`;
+    const popupId = `whatsx-popup-${Date.now()}`;
+    const chatId = `whatsx-ai-chat-${Date.now()}`;
+
     const aiChatHTML = aiAgentConfig?.enabled ? `
     <!-- WhatsX AI Chat Widget -->
-    <div id="whatsx-ai-chat-${Date.now()}" style="display: none; position: fixed; bottom: 20px; right: 20px; width: 320px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; z-index: 10000; flex-direction: column;">
+    <div id="${chatId}" style="display: none; position: fixed; bottom: 20px; right: 20px; width: 320px; height: 400px; background: white; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; z-index: 10000; flex-direction: column;">
       <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb; background: linear-gradient(to right, #dbeafe, #ede9fe); border-radius: 12px 12px 0 0; display: flex; align-items: center; justify-content: space-between;">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
           <div style="width: 20px; height: 20px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">🤖</div>
           <span style="font-weight: 600; color: #1e40af;">${aiAgentConfig.agentName}</span>
         </div>
-        <button onclick="closeAIChat()" style="background: none; border: none; cursor: pointer; padding: 0.25rem; color: #6b7280; font-size: 18px;">&times;</button>
+        <button onclick="closeAIChat('${chatId}')" style="background: none; border: none; cursor: pointer; padding: 0.25rem; color: #6b7280; font-size: 18px;">&times;</button>
       </div>
-      <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+      <div id="chat-messages-${chatId}" style="flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
         <div style="background: #f3f4f6; color: #374151; padding: 0.75rem; border-radius: 8px 8px 8px 2px; max-width: 85%; font-size: 14px;">
           ${aiAgentConfig.welcomeMessage}
         </div>
       </div>
       <div style="padding: 1rem; border-top: 1px solid #e5e7eb; display: flex; gap: 0.5rem;">
-        <input id="chat-input" type="text" placeholder="Ask me anything..." style="flex: 1; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
-        <button onclick="sendChatMessage()" style="background: #2563eb; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 14px;">Send</button>
+        <input id="chat-input-${chatId}" type="text" placeholder="Ask me anything..." style="flex: 1; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;" onkeypress="if(event.key==='Enter') sendChatMessage('${chatId}')">
+        <button onclick="sendChatMessage('${chatId}')" style="background: #2563eb; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 14px;">Send</button>
       </div>
     </div>
     
     <!-- AI Chat Button -->
-    <button id="ai-chat-trigger" onclick="showAIChat()" style="position: fixed; bottom: 20px; right: 20px; background: linear-gradient(to right, #2563eb, #7c3aed); color: white; border: none; padding: 0.75rem 1rem; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.5rem; font-weight: 500; z-index: 9999;">
+    <button id="ai-chat-trigger-${chatId}" onclick="showAIChat('${chatId}')" style="position: fixed; bottom: 20px; right: 20px; background: linear-gradient(to right, #2563eb, #7c3aed); color: white; border: none; padding: 0.75rem 1rem; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.5rem; font-weight: 500; z-index: 9999;">
       🤖 Need Help?
     </button>` : '';
 
     const aiScripts = aiAgentConfig?.enabled ? `
 // AI Chat Functionality
-let chatMessages = [];
-
-function showAIChat() {
-  document.getElementById('whatsx-ai-chat-${Date.now()}').style.display = 'flex';
-  document.getElementById('ai-chat-trigger').style.display = 'none';
+function showAIChat(chatId) {
+  document.getElementById(chatId).style.display = 'flex';
+  document.getElementById('ai-chat-trigger-' + chatId).style.display = 'none';
 }
 
-function closeAIChat() {
-  document.getElementById('whatsx-ai-chat-${Date.now()}').style.display = 'none';
-  document.getElementById('ai-chat-trigger').style.display = 'flex';
+function closeAIChat(chatId) {
+  document.getElementById(chatId).style.display = 'none';
+  document.getElementById('ai-chat-trigger-' + chatId).style.display = 'flex';
 }
 
-async function sendChatMessage() {
-  const input = document.getElementById('chat-input');
+async function sendChatMessage(chatId) {
+  const input = document.getElementById('chat-input-' + chatId);
   const message = input.value.trim();
   if (!message) return;
   
   // Add user message
-  addMessageToChat(message, true);
+  addMessageToChat(chatId, message, true);
   input.value = '';
   
   // Show typing indicator
-  showTypingIndicator();
+  showTypingIndicator(chatId);
   
   try {
-    // Call Gemini API (replace with your actual API key)
+    // Call Gemini API
     const response = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${aiAgentConfig.geminiApiKey}\`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -144,19 +146,20 @@ async function sendChatMessage() {
     if (response.ok) {
       const data = await response.json();
       const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I couldn't process that request.";
-      addMessageToChat(aiResponse, false);
+      addMessageToChat(chatId, aiResponse, false);
     } else {
       throw new Error('API Error');
     }
   } catch (error) {
-    addMessageToChat("I'm sorry, I'm having trouble connecting right now. Please try again later.", false);
+    console.error('Chat error:', error);
+    addMessageToChat(chatId, "I'm sorry, I'm having trouble connecting right now. Please check your API key and try again later.", false);
   }
   
-  hideTypingIndicator();
+  hideTypingIndicator(chatId);
 }
 
-function addMessageToChat(text, isUser) {
-  const messagesContainer = document.getElementById('chat-messages');
+function addMessageToChat(chatId, text, isUser) {
+  const messagesContainer = document.getElementById('chat-messages-' + chatId);
   const messageDiv = document.createElement('div');
   messageDiv.style.cssText = \`
     background: \${isUser ? '#2563eb' : '#f3f4f6'};
@@ -166,45 +169,54 @@ function addMessageToChat(text, isUser) {
     max-width: 85%;
     font-size: 14px;
     align-self: \${isUser ? 'flex-end' : 'flex-start'};
+    margin-bottom: 0.75rem;
   \`;
   messageDiv.textContent = text;
   messagesContainer.appendChild(messageDiv);
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-function showTypingIndicator() {
+function showTypingIndicator(chatId) {
   const indicator = document.createElement('div');
-  indicator.id = 'typing-indicator';
-  indicator.style.cssText = 'background: #f3f4f6; color: #374151; padding: 0.75rem; border-radius: 8px 8px 8px 2px; max-width: 85%; font-size: 14px; align-self: flex-start;';
+  indicator.id = 'typing-indicator-' + chatId;
+  indicator.style.cssText = 'background: #f3f4f6; color: #374151; padding: 0.75rem; border-radius: 8px 8px 8px 2px; max-width: 85%; font-size: 14px; align-self: flex-start; margin-bottom: 0.75rem;';
   indicator.innerHTML = '<div style="display: flex; gap: 2px;"><div style="width: 4px; height: 4px; background: #6b7280; border-radius: 50%; animation: bounce 1s infinite;"></div><div style="width: 4px; height: 4px; background: #6b7280; border-radius: 50%; animation: bounce 1s infinite 0.1s;"></div><div style="width: 4px; height: 4px; background: #6b7280; border-radius: 50%; animation: bounce 1s infinite 0.2s;"></div></div>';
-  document.getElementById('chat-messages').appendChild(indicator);
+  document.getElementById('chat-messages-' + chatId).appendChild(indicator);
 }
 
-function hideTypingIndicator() {
-  const indicator = document.getElementById('typing-indicator');
+function hideTypingIndicator(chatId) {
+  const indicator = document.getElementById('typing-indicator-' + chatId);
   if (indicator) indicator.remove();
-}
+}` : '';
 
-// Enter key support
-document.addEventListener('keydown', function(e) {
-  if (e.target.id === 'chat-input' && e.key === 'Enter') {
-    sendChatMessage();
-  }
-});` : '';
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsX Form - ${title}</title>
+  <style>
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-5px); }
+    }
+  </style>
+</head>
+<body>
 
-    return `<!-- WhatsX Generated Form with AI Agent -->
-<div id="whatsx-popup-${Date.now()}" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999;">
+<!-- WhatsX Generated Form with AI Agent -->
+<div id="${popupId}" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999;">
   <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: ${formStyle.backgroundColor}; padding: 2rem; border-radius: ${formStyle.borderRadius}; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-width: 400px; width: 90%; margin: 0 1rem; font-family: ${formStyle.fontFamily};">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: ${formStyle.spacing};">
       <h3 style="margin: 0; font-size: 1.25rem; font-weight: 600; color: ${formStyle.textColor}; font-family: ${formStyle.fontFamily};">${title}</h3>
-      <button onclick="closeWhatsXPopup()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 0.25rem; min-height: 44px; min-width: 44px; color: ${formStyle.textColor};">&times;</button>
+      <button onclick="closeWhatsXPopup('${popupId}')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 0.25rem; min-height: 44px; min-width: 44px; color: ${formStyle.textColor};">&times;</button>
     </div>
-    <form id="whatsx-form-${Date.now()}">
+    <form id="${formId}">
 ${fieldsHTML}
       <button type="submit" style="width: 100%; padding: 0.75rem; background: ${formStyle.primaryColor}; color: white; border: none; border-radius: ${formStyle.borderRadius}; font-weight: 500; cursor: pointer; font-size: 16px; min-height: 44px; font-family: ${formStyle.fontFamily}; margin-bottom: 1rem;">
         📱 ${formStyle.buttonText}
       </button>
-      ${aiAgentConfig?.enabled ? `<button type="button" onclick="showAIChat()" style="width: 100%; padding: 0.75rem; background: linear-gradient(to right, #2563eb, #7c3aed); color: white; border: none; border-radius: ${formStyle.borderRadius}; font-weight: 500; cursor: pointer; font-size: 16px; min-height: 44px; font-family: ${formStyle.fontFamily};">🤖 Chat with ${aiAgentConfig.agentName}</button>` : ''}
+      ${aiAgentConfig?.enabled ? `<button type="button" onclick="showAIChat('${chatId}')" style="width: 100%; padding: 0.75rem; background: linear-gradient(to right, #2563eb, #7c3aed); color: white; border: none; border-radius: ${formStyle.borderRadius}; font-weight: 500; cursor: pointer; font-size: 16px; min-height: 44px; font-family: ${formStyle.fontFamily};">🤖 Chat with ${aiAgentConfig.agentName}</button>` : ''}
     </form>
     
     <!-- WhatsX Branding -->
@@ -218,25 +230,18 @@ ${fieldsHTML}
 
 ${aiChatHTML}
 
-<style>
-@keyframes bounce {
-  0%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-5px); }
-}
-</style>
-
 <script>
-function showWhatsXPopup() {
-  document.getElementById('whatsx-popup-${Date.now()}').style.display = 'block';
+function showWhatsXPopup(popupId) {
+  document.getElementById(popupId).style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
 
-function closeWhatsXPopup() {
-  document.getElementById('whatsx-popup-${Date.now()}').style.display = 'none';
+function closeWhatsXPopup(popupId) {
+  document.getElementById(popupId).style.display = 'none';
   document.body.style.overflow = 'auto';
 }
 
-document.getElementById('whatsx-form-${Date.now()}').addEventListener('submit', function(e) {
+document.getElementById('${formId}').addEventListener('submit', function(e) {
   e.preventDefault();
   const formData = new FormData(this);
   
@@ -249,29 +254,34 @@ document.getElementById('whatsx-form-${Date.now()}').addEventListener('submit', 
   const whatsappUrl = \`https://wa.me/${whatsappNumber}?text=\${encodeURIComponent(message)}\`;
   
   window.open(whatsappUrl, '_blank');
-  closeWhatsXPopup();
+  closeWhatsXPopup('${popupId}');
   this.reset();
 });
 
 // Close popup when clicking outside
-document.getElementById('whatsx-popup-${Date.now()}').addEventListener('click', function(e) {
+document.getElementById('${popupId}').addEventListener('click', function(e) {
   if (e.target === this) {
-    closeWhatsXPopup();
+    closeWhatsXPopup('${popupId}');
   }
 });
 
 // Close popup with escape key
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && document.getElementById('whatsx-popup-${Date.now()}').style.display === 'block') {
-    closeWhatsXPopup();
+  if (e.key === 'Escape' && document.getElementById('${popupId}').style.display === 'block') {
+    closeWhatsXPopup('${popupId}');
   }
 });
+
+${aiScripts}
 </script>
 
 <!-- Usage: Add this button anywhere on your website -->
-<button onclick="showWhatsXPopup()" style="background: linear-gradient(to right, ${formStyle.primaryColor}, #7c3aed); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: ${formStyle.borderRadius}; cursor: pointer; font-weight: 500; font-size: 16px; min-height: 44px; font-family: ${formStyle.fontFamily}; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+<button onclick="showWhatsXPopup('${popupId}')" style="background: linear-gradient(to right, ${formStyle.primaryColor}, #7c3aed); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: ${formStyle.borderRadius}; cursor: pointer; font-weight: 500; font-size: 16px; min-height: 44px; font-family: ${formStyle.fontFamily}; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
   ✨ ${title}
-</button>`;
+</button>
+
+</body>
+</html>`;
   };
 
   const copyCode = () => {
@@ -346,8 +356,8 @@ document.addEventListener('keydown', function(e) {
             </h4>
             <ol className="list-decimal list-inside text-sm text-blue-800 space-y-1">
               <li>Copy the generated code above</li>
-              <li>Paste it into your website's HTML</li>
-              <li>Replace "{whatsappNumber}" with your actual WhatsApp number</li>
+              <li>Save it as an HTML file (e.g., whatsx-form.html)</li>
+              <li>Replace "{whatsappNumber}" with your actual WhatsApp number if needed</li>
               {aiAgentConfig?.enabled && (
                 <li className="font-medium">🤖 Your AI agent will automatically help users with form questions!</li>
               )}
@@ -366,6 +376,7 @@ document.addEventListener('keydown', function(e) {
                 <li>• Contextual help based on your form fields</li>
                 <li>• Custom personality: {aiAgentConfig.agentName}</li>
                 <li>• Automatic responses to user questions</li>
+                <li>• Real-time API key validation</li>
               </ul>
             </div>
           )}
