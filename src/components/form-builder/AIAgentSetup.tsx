@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Bot, Key, MessageSquare, Settings, Sparkles, AlertCircle, CheckCircle, Template } from "lucide-react";
+import { Bot, Key, MessageSquare, Settings, Sparkles, AlertCircle, CheckCircle, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { AIAgentTemplates } from "./AIAgentTemplates";
 
@@ -143,7 +143,7 @@ export const AIAgentSetup = ({ config, onUpdateConfig }: AIAgentSetupProps) => {
             <Tabs defaultValue="templates" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="templates" className="flex items-center">
-                  <Template className="w-4 h-4 mr-1" />
+                  <FileText className="w-4 h-4 mr-1" />
                   Templates
                 </TabsTrigger>
                 <TabsTrigger value="custom" className="flex items-center">
