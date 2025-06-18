@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -62,9 +63,17 @@ const Index = () => {
               </Button>
             </Link>
             <Link to="/ai-agent">
-              <Button size="lg" variant="outline" className="border-blue-200 text-blue-700 hover:bg-blue-50 text-lg px-8 py-6">
-                <Bot className="w-5 h-5 mr-2" />
-                Try AI Agent
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="group relative border-2 border-blue-200 text-blue-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:border-purple-300 text-lg px-8 py-6 transition-all duration-300 hover:shadow-lg hover:scale-105 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+                <Bot className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                <span className="relative z-10 bg-gradient-to-r from-blue-700 to-purple-700 bg-clip-text text-transparent group-hover:from-blue-800 group-hover:to-purple-800">
+                  Try AI Agent
+                </span>
+                <Sparkles className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-purple-600" />
               </Button>
             </Link>
           </div>
@@ -373,9 +382,19 @@ const Index = () => {
               </Button>
             </Link>
             <Link to="/ai-agent">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8 py-6">
-                <Bot className="w-5 h-5 mr-2" />
-                Explore AI Features
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="group relative border-2 border-white text-white hover:bg-white/10 hover:bg-gradient-to-r hover:from-white/10 hover:to-purple-200/20 text-lg px-8 py-6 transition-all duration-300 hover:shadow-xl hover:scale-105 backdrop-blur-sm overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-purple-300/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500"></div>
+                <Bot className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300 relative z-10" />
+                <span className="relative z-10 group-hover:text-purple-100 transition-colors duration-300">
+                  Explore AI Features
+                </span>
+                <div className="ml-2 relative z-10">
+                  <Sparkles className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all duration-300 text-purple-200 group-hover:animate-pulse" />
+                </div>
               </Button>
             </Link>
           </div>
