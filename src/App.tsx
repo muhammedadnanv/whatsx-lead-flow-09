@@ -18,6 +18,12 @@ import Tutorials from "./pages/Tutorials";
 import Contact from "./pages/Contact";
 import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
+// Landing Page Variations
+import AILanding from "./pages/AILanding";
+import BuilderLanding from "./pages/BuilderLanding";
+import BusinessLanding from "./pages/BusinessLanding";
+import DeveloperLanding from "./pages/DeveloperLanding";
+import MobileLanding from "./pages/MobileLanding";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +47,12 @@ const App = () => (
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/cookie-policy" element={<CookiePolicy />} />
+          {/* Landing Page Variations */}
+          <Route path="/ai" element={<AILanding />} />
+          <Route path="/builder" element={<BuilderLanding />} />
+          <Route path="/business" element={<BusinessLanding />} />
+          <Route path="/developers" element={<DeveloperLanding />} />
+          <Route path="/mobile" element={<MobileLanding />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
