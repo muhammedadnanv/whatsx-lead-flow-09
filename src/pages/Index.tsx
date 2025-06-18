@@ -155,12 +155,8 @@ document.addEventListener('keydown', function(e) {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" className="text-gray-600 hover:text-green-600">
-              Login
-            </Button>
-            <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700">
-              Start Free Trial
-            </Button>
+            
+            
           </div>
 
           {/* Mobile Menu Button */}
