@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import FormBuilder from "./pages/FormBuilder";
 import AIAgent from "./pages/AIAgent";
+import Documentation from "./pages/Documentation";
+import HelpCenter from "./pages/HelpCenter";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import Support from "./pages/Support";
@@ -24,6 +26,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/form-builder" element={<FormBuilder />} />
           <Route path="/ai-agent" element={<AIAgent />} />
+          <Route path="/documentation" element={<Documentation />} />
+          <Route path="/help-center" element={<HelpCenter />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/support" element={<Support />} />
