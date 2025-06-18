@@ -80,7 +80,7 @@ const DeveloperLanding = () => {
           {/* Developer Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-green-400">< 100ms</div>
+              <div className="text-2xl sm:text-3xl font-bold text-green-400">&lt; 100ms</div>
               <div className="text-gray-400 text-sm">API Response Time</div>
             </div>
             <div className="text-center">
