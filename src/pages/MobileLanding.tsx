@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Smartphone, MessageCircle, Zap, Users, Heart, CheckCircle, Star, Play, Globe, Clock, Gift } from "lucide-react";
+import { ArrowRight, Smartphone, MessageCircle, Zap, Users, Heart, CheckCircle, Star, Play, Globe, Clock, Gift, Calendar, BarChart3, Palette, Database, Shield, Webhook } from "lucide-react";
 import { Link } from "react-router-dom";
 import { VideoPopup } from "@/components/VideoPopup";
 
@@ -232,6 +232,122 @@ const MobileLanding = () => {
                   <div className="text-gray-600 text-xs">Member signups</div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Coming Soon Features */}
+      <section className="py-8 px-4 bg-gradient-to-r from-indigo-50 to-cyan-50">
+        <div className="container mx-auto max-w-sm">
+          <div className="text-center mb-6">
+            <Badge className="mb-3 bg-gradient-to-r from-indigo-100 to-cyan-100 text-indigo-700 border-indigo-200 text-xs">
+              <Clock className="w-3 h-3 mr-1" />
+              Coming Soon
+            </Badge>
+            <h2 className="text-xl font-bold mb-3 text-gray-800">
+              Exciting Features Ahead
+            </h2>
+            <p className="text-sm text-gray-600">
+              Amazing new features launching soon
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <Card className="border border-indigo-100 bg-gradient-to-r from-white to-indigo-50/30 opacity-90">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                    <Calendar className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-indigo-900 text-sm">Smart Scheduling</div>
+                    <div className="text-gray-600 text-xs">Auto-book appointments via WhatsApp</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-purple-100 bg-gradient-to-r from-white to-purple-50/30 opacity-90">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <BarChart3 className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-purple-900 text-sm">Analytics Dashboard</div>
+                    <div className="text-gray-600 text-xs">Track form performance & conversions</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-cyan-100 bg-gradient-to-r from-white to-cyan-50/30 opacity-90">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg flex items-center justify-center">
+                    <Palette className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-cyan-900 text-sm">Custom Themes</div>
+                    <div className="text-gray-600 text-xs">Brand matching & advanced styling</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-green-50/30 opacity-90">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                    <Database className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-green-900 text-sm">CRM Integration</div>
+                    <div className="text-gray-600 text-xs">Connect with Salesforce, HubSpot & more</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-orange-100 bg-gradient-to-r from-white to-orange-50/30 opacity-90">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                    <Shield className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-orange-900 text-sm">Advanced Security</div>
+                    <div className="text-gray-600 text-xs">2FA, encryption & compliance tools</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-pink-100 bg-gradient-to-r from-white to-pink-50/30 opacity-90">
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg flex items-center justify-center">
+                    <Webhook className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-pink-900 text-sm">Webhooks & API</div>
+                    <div className="text-gray-600 text-xs">Developer tools & custom integrations</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-6 text-center">
+            <div className="bg-white/70 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
+              <p className="text-xs text-gray-600 mb-2">Be the first to know when these launch!</p>
+              <Link to="/form-builder">
+                <Button size="sm" className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-xs px-4">
+                  <Star className="w-3 h-3 mr-1" />
+                  Join Early Access
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
