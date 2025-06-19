@@ -903,36 +903,36 @@ setTimeout(() => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto mobile-px py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 md:space-x-3">
               <Link to="/">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 min-h-[44px] min-w-[44px]">
+                  <ArrowLeft className="w-4 h-4 mr-1 md:mr-2" />
+                  <span className="hidden sm:inline">Back</span>
                 </Button>
               </Link>
               <div className="flex items-center space-x-2">
-                <Bot className="w-6 h-6 text-blue-200" />
-                <h1 className="text-2xl font-bold">AI Agent</h1>
+                <Bot className="w-5 h-5 md:w-6 md:h-6 text-blue-200" />
+                <h1 className="text-lg md:text-2xl font-bold">AI Agent</h1>
               </div>
             </div>
             
-            <Badge className="bg-white/20 text-white border-white/30">
+            <Badge className="bg-white/20 text-white border-white/30 text-xs md:text-sm">
               <Sparkles className="w-3 h-3 mr-1" />
-              Powered by Gemini
+              <span className="hidden sm:inline">Powered by </span>Gemini
             </Badge>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="container mx-auto mobile-px py-4 md:py-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
           {/* Configuration Panel */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center text-lg md:text-xl">
                   <Settings className="w-5 h-5 mr-2 text-blue-600" />
                   AI Configuration
                 </CardTitle>
@@ -942,7 +942,7 @@ setTimeout(() => {
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <Key className="w-4 h-4 text-gray-600" />
-                    <Label htmlFor="geminiApiKey">Gemini API Key</Label>
+                    <Label htmlFor="geminiApiKey" className="text-sm md:text-base">Gemini API Key</Label>
                     <Badge variant="secondary" className="text-xs">Required</Badge>
                   </div>
                   <Input
@@ -954,9 +954,9 @@ setTimeout(() => {
                       setConnectionStatus('idle');
                     }}
                     placeholder="AIzaSy..."
-                    className="font-mono text-sm"
+                    className="font-mono text-sm min-h-[44px]"
                   />
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <p className="text-xs text-gray-500">
                       Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google AI Studio</a>
                     </p>
@@ -965,6 +965,7 @@ setTimeout(() => {
                       disabled={isTestingConnection || !geminiApiKey}
                       size="sm"
                       variant="outline"
+                      className="min-h-[44px] w-full sm:w-auto"
                     >
                       {isTestingConnection ? "Testing..." : "Test Connection"}
                     </Button>
@@ -972,18 +973,19 @@ setTimeout(() => {
                 </div>
 
                 {/* Agent Settings */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="agentName">Agent Name</Label>
+                    <Label htmlFor="agentName" className="text-sm md:text-base">Agent Name</Label>
                     <Input
                       id="agentName"
                       value={agentName}
                       onChange={(e) => setAgentName(e.target.value)}
                       placeholder="AI Assistant"
+                      className="min-h-[44px]"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="temperature">Creativity Level</Label>
+                    <Label htmlFor="temperature" className="text-sm md:text-base">Creativity Level</Label>
                     <Input
                       id="temperature"
                       type="number"
@@ -992,37 +994,40 @@ setTimeout(() => {
                       step="0.1"
                       value={temperature}
                       onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                      className="min-h-[44px]"
                     />
                   </div>
                 </div>
 
                 {/* System Prompt */}
                 <div className="space-y-2">
-                  <Label htmlFor="systemPrompt">System Instructions</Label>
+                  <Label htmlFor="systemPrompt" className="text-sm md:text-base">System Instructions</Label>
                   <Textarea
                     id="systemPrompt"
                     value={systemPrompt}
                     onChange={(e) => setSystemPrompt(e.target.value)}
                     placeholder="Define how your AI should behave..."
                     rows={3}
+                    className="mobile-text resize-none"
                   />
                 </div>
 
                 {/* Welcome Message */}
                 <div className="space-y-2">
-                  <Label htmlFor="welcomeMessage">Welcome Message</Label>
+                  <Label htmlFor="welcomeMessage" className="text-sm md:text-base">Welcome Message</Label>
                   <Textarea
                     id="welcomeMessage"
                     value={welcomeMessage}
                     onChange={(e) => setWelcomeMessage(e.target.value)}
                     placeholder="Hi! How can I help you today?"
                     rows={2}
+                    className="mobile-text resize-none"
                   />
                 </div>
 
                 {/* Max Tokens */}
                 <div className="space-y-2">
-                  <Label htmlFor="maxTokens">Max Response Length</Label>
+                  <Label htmlFor="maxTokens" className="text-sm md:text-base">Max Response Length</Label>
                   <Input
                     id="maxTokens"
                     type="number"
@@ -1030,6 +1035,7 @@ setTimeout(() => {
                     max="2048"
                     value={maxTokens}
                     onChange={(e) => setMaxTokens(parseInt(e.target.value))}
+                    className="min-h-[44px]"
                   />
                 </div>
               </CardContent>
@@ -1037,28 +1043,28 @@ setTimeout(() => {
 
             {/* Embed Code Section */}
             <Card className="border-2 border-gradient-to-r from-purple-100 to-pink-100 bg-gradient-to-r from-purple-50 to-pink-50">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                   <div className="flex items-center">
                     <Code className="w-5 h-5 mr-2 text-purple-600" />
-                    Embed AI Agent
-                    <Badge className="ml-2 bg-purple-100 text-purple-700">
+                    <span className="text-lg md:text-xl">Embed AI Agent</span>
+                    <Badge className="ml-2 bg-purple-100 text-purple-700 text-xs">
                       <Sparkles className="w-3 h-3 mr-1" />
-                      Integrate Anywhere
+                      <span className="hidden sm:inline">Integrate </span>Anywhere
                     </Badge>
                   </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 mobile-text">
                   Generate embed code to integrate this AI Agent into your website or platform. The chatbot will appear as a floating widget in the bottom-right corner.
                 </p>
                 
-                <div className="flex flex-wrap gap-3">
+                <div className="button-group flex flex-col sm:flex-row gap-3">
                   <Button 
                     onClick={copyEmbedCode} 
                     disabled={!geminiApiKey}
-                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                    className="bg-purple-600 hover:bg-purple-700 text-white min-h-[44px] flex-1"
                   >
                     <Copy className="w-4 h-4 mr-2" />
                     Copy Embed Code
@@ -1068,29 +1074,29 @@ setTimeout(() => {
                     onClick={downloadEmbedCode} 
                     disabled={!geminiApiKey}
                     variant="outline" 
-                    className="border-purple-200 text-purple-600 hover:bg-purple-50"
+                    className="border-purple-200 text-purple-600 hover:bg-purple-50 min-h-[44px] flex-1"
                   >
                     <Download className="w-4 h-4 mr-2" />
-                    Download HTML File
+                    Download HTML
                   </Button>
                   
                   <Button 
                     variant="ghost" 
                     size="sm"
                     onClick={() => window.open('https://whatsx-nine.vercel.app/', '_blank')}
-                    className="text-purple-600 hover:bg-purple-50"
+                    className="text-purple-600 hover:bg-purple-50 min-h-[44px] sm:flex-none"
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Learn More
                   </Button>
                 </div>
 
-                <div className="bg-white/50 rounded-lg p-4 border border-purple-200">
-                  <h4 className="font-medium text-purple-900 mb-2 flex items-center">
+                <div className="bg-white/50 rounded-lg p-3 md:p-4 border border-purple-200">
+                  <h4 className="font-medium text-purple-900 mb-2 flex items-center text-sm md:text-base">
                     <Bot className="w-4 h-4 mr-2" />
                     Integration Features:
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
                     <div>
                       <h5 className="font-medium text-purple-800 mb-1">🎨 Professional Design:</h5>
                       <ul className="text-purple-700 space-y-1 text-xs">
@@ -1126,27 +1132,31 @@ setTimeout(() => {
           </div>
 
           {/* Chat Panel */}
-          <div className="space-y-6">
-            <Card className="h-96">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="flex items-center">
+          <div className="space-y-4 md:space-y-6">
+            <Card className="h-[400px] md:h-96">
+              <CardHeader className="flex flex-row items-center justify-between pb-4">
+                <CardTitle className="flex items-center text-lg md:text-xl">
                   <MessageSquare className="w-5 h-5 mr-2 text-blue-600" />
-                  Chat with {agentName}
+                  <span className="truncate">Chat with {agentName}</span>
                 </CardTitle>
                 {isChatStarted && (
-                  <Button onClick={resetChat} variant="outline" size="sm">
+                  <Button onClick={resetChat} variant="outline" size="sm" className="min-h-[44px] min-w-[44px]">
                     <X className="w-4 h-4 mr-1" />
-                    Reset
+                    <span className="hidden sm:inline">Reset</span>
                   </Button>
                 )}
               </CardHeader>
-              <CardContent className="flex flex-col h-full">
+              <CardContent className="flex flex-col h-full p-3 md:p-6">
                 {!isChatStarted ? (
                   <div className="flex-1 flex items-center justify-center">
                     <div className="text-center space-y-4">
-                      <Bot className="w-16 h-16 text-gray-400 mx-auto" />
-                      <p className="text-gray-500">Ready to start chatting!</p>
-                      <Button onClick={startChat} disabled={!geminiApiKey}>
+                      <Bot className="w-12 h-12 md:w-16 md:h-16 text-gray-400 mx-auto" />
+                      <p className="text-gray-500 text-sm md:text-base">Ready to start chatting!</p>
+                      <Button 
+                        onClick={startChat} 
+                        disabled={!geminiApiKey}
+                        className="min-h-[44px] px-6"
+                      >
                         <MessageSquare className="w-4 h-4 mr-2" />
                         Start Chat
                       </Button>
@@ -1155,14 +1165,14 @@ setTimeout(() => {
                 ) : (
                   <>
                     {/* Chat Messages */}
-                    <div className="flex-1 overflow-y-auto space-y-3 mb-4">
+                    <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2">
                       {chatMessages.map((message) => (
                         <div
                           key={message.id}
                           className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
                         >
                           <div
-                            className={`max-w-[80%] p-3 rounded-lg text-sm ${
+                            className={`max-w-[85%] sm:max-w-[80%] p-3 rounded-lg text-sm mobile-text ${
                               message.isUser
                                 ? 'bg-blue-600 text-white rounded-br-sm'
                                 : 'bg-gray-100 text-gray-800 rounded-bl-sm'
@@ -1192,13 +1202,13 @@ setTimeout(() => {
                         onChange={(e) => setChatInput(e.target.value)}
                         placeholder="Type your message..."
                         onKeyPress={handleKeyPress}
-                        className="flex-1"
+                        className="flex-1 min-h-[44px] mobile-text"
                       />
                       <Button
                         onClick={sendChatMessage}
                         disabled={!chatInput.trim() || isAITyping}
                         size="sm"
-                        className="bg-blue-600 hover:bg-blue-700"
+                        className="bg-blue-600 hover:bg-blue-700 min-h-[44px] min-w-[44px]"
                       >
                         <Send className="w-4 h-4" />
                       </Button>
