@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,19 +10,19 @@ const MobileLanding = () => {
   const videoUrl = "https://www.loom.com/share/c1f4cf1f5d5b4c4d9c5e745032b2a081?sid=666100aa-4de5-4d25-92fc-8f4605f7b862";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-whatsapp-gray to-green-50">
       {/* Mobile-Optimized Navigation */}
-      <nav className="bg-white/90 backdrop-blur-sm border-b border-pink-100 sticky top-0 z-50">
+      <nav className="bg-white/90 backdrop-blur-sm border-b border-green-100 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
-              <Smartphone className="w-6 h-6 text-pink-600" />
-              <span className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+              <Smartphone className="w-6 h-6 text-whatsapp-green" />
+              <span className="text-lg font-bold bg-gradient-to-r from-whatsapp-green to-whatsapp-dark-green bg-clip-text text-transparent">
                 WhatsX
               </span>
             </Link>
             <Link to="/form-builder">
-              <Button size="sm" className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-sm px-4">
+              <Button size="sm" className="bg-whatsapp-green hover:bg-whatsapp-dark-green text-sm px-4">
                 Start Free
                 <ArrowRight className="w-3 h-3 ml-1" />
               </Button>
@@ -31,7 +32,7 @@ const MobileLanding = () => {
       </nav>
 
       {/* Free Platform Banner */}
-      <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4">
+      <div className="bg-gradient-to-r from-whatsapp-green to-whatsapp-dark-green text-white py-2 px-4">
         <div className="container mx-auto text-center">
           <div className="flex items-center justify-center space-x-1 text-xs sm:text-sm font-semibold">
             <Gift className="w-3 h-3 sm:w-4 sm:h-4 animate-bounce" />
@@ -43,12 +44,12 @@ const MobileLanding = () => {
       {/* Mobile Hero Section */}
       <section className="py-8 px-4">
         <div className="container mx-auto text-center max-w-lg">
-          <Badge className="mb-4 bg-gradient-to-r from-pink-100 to-purple-100 text-pink-700 border-pink-200 text-xs">
+          <Badge className="mb-4 bg-whatsapp-light-green text-whatsapp-dark-green border-whatsapp-green text-xs">
             <Smartphone className="w-3 h-3 mr-1" />
             Mobile-First Design
           </Badge>
           
-          <h1 className="text-2xl sm:text-3xl font-bold mb-4 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4 bg-gradient-to-r from-whatsapp-green via-whatsapp-dark-green to-green-600 bg-clip-text text-transparent leading-tight">
             WhatsApp Forms
             <br />
             Made for Mobile
@@ -61,7 +62,7 @@ const MobileLanding = () => {
           
           <div className="space-y-3 mb-6">
             <Link to="/form-builder" className="block">
-              <Button size="lg" className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-base py-4">
+              <Button size="lg" className="w-full bg-whatsapp-green hover:bg-whatsapp-dark-green text-base py-4">
                 <Zap className="w-4 h-4 mr-2" />
                 Create Your Form
               </Button>
@@ -71,22 +72,22 @@ const MobileLanding = () => {
               buttonText="Watch Demo (1 min)"
               buttonVariant="outline"
               buttonSize="lg"
-              className="w-full border-2 border-pink-200 text-pink-700 hover:bg-pink-50 py-4"
+              className="w-full border-2 border-whatsapp-green text-whatsapp-dark-green hover:bg-whatsapp-light-green py-4"
             />
           </div>
 
           {/* Mobile Stats */}
           <div className="grid grid-cols-3 gap-3 text-center">
             <div>
-              <div className="text-lg font-bold text-pink-600">2 Min</div>
+              <div className="text-lg font-bold text-whatsapp-green">2 Min</div>
               <div className="text-gray-600 text-xs">Setup Time</div>
             </div>
             <div>
-              <div className="text-lg font-bold text-purple-600">7 Months</div>
+              <div className="text-lg font-bold text-whatsapp-dark-green">7 Months</div>
               <div className="text-gray-600 text-xs">Free Access</div>
             </div>
             <div>
-              <div className="text-lg font-bold text-blue-600">No Cards</div>
+              <div className="text-lg font-bold text-green-600">No Cards</div>
               <div className="text-gray-600 text-xs">Required</div>
             </div>
           </div>
@@ -106,13 +107,13 @@ const MobileLanding = () => {
           </div>
 
           <div className="space-y-4">
-            <Card className="border border-pink-100 bg-gradient-to-r from-white to-pink-50/30">
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-whatsapp-light-green/30">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
                     <Smartphone className="w-4 h-4 text-white" />
                   </div>
-                  <CardTitle className="text-pink-900 text-base">Touch-Friendly</CardTitle>
+                  <CardTitle className="text-whatsapp-dark-green text-base">Touch-Friendly</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
@@ -122,13 +123,13 @@ const MobileLanding = () => {
               </CardContent>
             </Card>
 
-            <Card className="border border-purple-100 bg-gradient-to-r from-white to-purple-50/30">
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-whatsapp-light-green/30">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
                     <Zap className="w-4 h-4 text-white" />
                   </div>
-                  <CardTitle className="text-purple-900 text-base">Lightning Fast</CardTitle>
+                  <CardTitle className="text-whatsapp-dark-green text-base">Lightning Fast</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
@@ -138,13 +139,13 @@ const MobileLanding = () => {
               </CardContent>
             </Card>
 
-            <Card className="border border-blue-100 bg-gradient-to-r from-white to-blue-50/30">
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-whatsapp-light-green/30">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
                     <MessageCircle className="w-4 h-4 text-white" />
                   </div>
-                  <CardTitle className="text-blue-900 text-base">WhatsApp Ready</CardTitle>
+                  <CardTitle className="text-whatsapp-dark-green text-base">WhatsApp Ready</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
@@ -154,13 +155,13 @@ const MobileLanding = () => {
               </CardContent>
             </Card>
 
-            <Card className="border border-green-100 bg-gradient-to-r from-white to-green-50/30">
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-whatsapp-light-green/30">
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
                     <Heart className="w-4 h-4 text-white" />
                   </div>
-                  <CardTitle className="text-green-900 text-base">User-Friendly</CardTitle>
+                  <CardTitle className="text-whatsapp-dark-green text-base">User-Friendly</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
@@ -212,8 +213,8 @@ const MobileLanding = () => {
 
             <div className="bg-white rounded-lg border border-gray-100 p-4">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                  <span className="text-green-600 text-sm">🚗</span>
+                <div className="w-8 h-8 bg-whatsapp-light-green rounded-full flex items-center justify-center">
+                  <span className="text-whatsapp-dark-green text-sm">🚗</span>
                 </div>
                 <div>
                   <div className="font-medium text-gray-800 text-sm">Local Services</div>
@@ -224,8 +225,8 @@ const MobileLanding = () => {
 
             <div className="bg-white rounded-lg border border-gray-100 p-4">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                  <span className="text-purple-600 text-sm">🏋️</span>
+                <div className="w-8 h-8 bg-whatsapp-light-green rounded-full flex items-center justify-center">
+                  <span className="text-whatsapp-dark-green text-sm">🏋️</span>
                 </div>
                 <div>
                   <div className="font-medium text-gray-800 text-sm">Fitness & Health</div>
@@ -238,10 +239,10 @@ const MobileLanding = () => {
       </section>
 
       {/* Coming Soon Features */}
-      <section className="py-8 px-4 bg-gradient-to-r from-indigo-50 to-cyan-50">
+      <section className="py-8 px-4 bg-gradient-to-r from-whatsapp-light-green to-green-50">
         <div className="container mx-auto max-w-sm">
           <div className="text-center mb-6">
-            <Badge className="mb-3 bg-gradient-to-r from-indigo-100 to-cyan-100 text-indigo-700 border-indigo-200 text-xs">
+            <Badge className="mb-3 bg-whatsapp-green text-white border-whatsapp-dark-green text-xs">
               <Clock className="w-3 h-3 mr-1" />
               Coming Soon
             </Badge>
@@ -254,84 +255,84 @@ const MobileLanding = () => {
           </div>
 
           <div className="space-y-3">
-            <Card className="border border-indigo-100 bg-gradient-to-r from-white to-indigo-50/30 opacity-90">
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-whatsapp-light-green/30 opacity-90">
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
                     <Calendar className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1">
-                    <div className="font-medium text-indigo-900 text-sm">Smart Scheduling</div>
+                    <div className="font-medium text-whatsapp-dark-green text-sm">Smart Scheduling</div>
                     <div className="text-gray-600 text-xs">Auto-book appointments via WhatsApp</div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border border-purple-100 bg-gradient-to-r from-white to-purple-50/30 opacity-90">
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-whatsapp-light-green/30 opacity-90">
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
                     <BarChart3 className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1">
-                    <div className="font-medium text-purple-900 text-sm">Analytics Dashboard</div>
+                    <div className="font-medium text-whatsapp-dark-green text-sm">Analytics Dashboard</div>
                     <div className="text-gray-600 text-xs">Track form performance & conversions</div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border border-cyan-100 bg-gradient-to-r from-white to-cyan-50/30 opacity-90">
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-whatsapp-light-green/30 opacity-90">
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
                     <Palette className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1">
-                    <div className="font-medium text-cyan-900 text-sm">Custom Themes</div>
+                    <div className="font-medium text-whatsapp-dark-green text-sm">Custom Themes</div>
                     <div className="text-gray-600 text-xs">Brand matching & advanced styling</div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border border-green-100 bg-gradient-to-r from-white to-green-50/30 opacity-90">
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-whatsapp-light-green/30 opacity-90">
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
                     <Database className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1">
-                    <div className="font-medium text-green-900 text-sm">CRM Integration</div>
+                    <div className="font-medium text-whatsapp-dark-green text-sm">CRM Integration</div>
                     <div className="text-gray-600 text-xs">Connect with Salesforce, HubSpot & more</div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border border-orange-100 bg-gradient-to-r from-white to-orange-50/30 opacity-90">
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-whatsapp-light-green/30 opacity-90">
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
                     <Shield className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1">
-                    <div className="font-medium text-orange-900 text-sm">Advanced Security</div>
+                    <div className="font-medium text-whatsapp-dark-green text-sm">Advanced Security</div>
                     <div className="text-gray-600 text-xs">2FA, encryption & compliance tools</div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border border-pink-100 bg-gradient-to-r from-white to-pink-50/30 opacity-90">
+            <Card className="border border-green-100 bg-gradient-to-r from-white to-whatsapp-light-green/30 opacity-90">
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
                     <Webhook className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1">
-                    <div className="font-medium text-pink-900 text-sm">Webhooks & API</div>
+                    <div className="font-medium text-whatsapp-dark-green text-sm">Webhooks & API</div>
                     <div className="text-gray-600 text-xs">Developer tools & custom integrations</div>
                   </div>
                 </div>
@@ -343,7 +344,7 @@ const MobileLanding = () => {
             <div className="bg-white/70 backdrop-blur-sm rounded-lg p-4 border border-gray-200">
               <p className="text-xs text-gray-600 mb-2">Be the first to know when these launch!</p>
               <Link to="/form-builder">
-                <Button size="sm" className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-xs px-4">
+                <Button size="sm" className="bg-whatsapp-green hover:bg-whatsapp-dark-green text-xs px-4">
                   <Star className="w-3 h-3 mr-1" />
                   Join Early Access
                 </Button>
@@ -354,23 +355,23 @@ const MobileLanding = () => {
       </section>
 
       {/* Mobile CTA Section */}
-      <section className="py-8 px-4 bg-gradient-to-r from-pink-500 to-purple-600">
+      <section className="py-8 px-4 bg-gradient-to-r from-whatsapp-green to-whatsapp-dark-green">
         <div className="container mx-auto text-center max-w-sm">
           <h2 className="text-xl font-bold text-white mb-3">
             Start in 2 Minutes
           </h2>
-          <p className="text-pink-100 mb-6 text-sm">
+          <p className="text-green-100 mb-6 text-sm">
             Create your first mobile form right now - completely free for 7 months
           </p>
           
           <div className="space-y-3">
             <Link to="/form-builder" className="block">
-              <Button size="lg" className="w-full bg-white text-pink-600 hover:bg-gray-100 text-base py-4">
+              <Button size="lg" className="w-full bg-white text-whatsapp-green hover:bg-gray-100 text-base py-4">
                 <Smartphone className="w-4 h-4 mr-2" />
                 Create Form Now
               </Button>
             </Link>
-            <div className="flex items-center justify-center space-x-4 text-pink-100 text-xs">
+            <div className="flex items-center justify-center space-x-4 text-green-100 text-xs">
               <div className="flex items-center">
                 <CheckCircle className="w-3 h-3 mr-1" />
                 No Credit Card
@@ -388,7 +389,7 @@ const MobileLanding = () => {
       <footer className="bg-gray-900 text-white py-6 px-4">
         <div className="container mx-auto max-w-sm text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <Smartphone className="w-4 h-4 text-pink-400" />
+            <Smartphone className="w-4 h-4 text-whatsapp-green" />
             <span className="text-sm font-bold">WhatsX</span>
           </div>
           <p className="text-gray-400 text-xs mb-4">

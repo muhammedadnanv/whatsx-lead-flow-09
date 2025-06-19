@@ -13,12 +13,12 @@ interface StyleEditorProps {
 }
 
 const colorPresets = [
-  { name: 'Green', value: '#10b981' },
+  { name: 'WhatsApp Green', value: '#25d366' },
+  { name: 'WhatsApp Dark', value: '#128c7e' },
   { name: 'Blue', value: '#3b82f6' },
   { name: 'Purple', value: '#8b5cf6' },
   { name: 'Red', value: '#ef4444' },
   { name: 'Orange', value: '#f97316' },
-  { name: 'Pink', value: '#ec4899' },
 ];
 
 const fontFamilies = [
@@ -51,7 +51,7 @@ export const StyleEditor = ({ formStyle, onUpdateStyle }: StyleEditorProps) => {
               <Input
                 value={formStyle.primaryColor}
                 onChange={(e) => onUpdateStyle({ primaryColor: e.target.value })}
-                placeholder="#10b981"
+                placeholder="#25d366"
                 className="flex-1"
               />
             </div>
