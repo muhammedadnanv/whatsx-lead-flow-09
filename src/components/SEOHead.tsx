@@ -14,7 +14,7 @@ const SEOHead = ({
   title = "WhatsX - Turn Website Visitors Into WhatsApp Leads | AI-Powered Lead Generation",
   description = "Create AI-powered form popups that capture leads and instantly deliver them to your WhatsApp. Revolutionary SaaS tool with Google Gemini AI for 87% higher conversion rates.",
   keywords = "WhatsApp leads, lead generation, AI forms, form builder, WhatsApp integration, lead capture, popup forms, SaaS, conversion optimization, Google Gemini AI",
-  ogImage = "https://lovable.dev/opengraph-image-p98pqg.png",
+  ogImage = "/lovable-uploads/be006f58-eee2-40fe-8e43-6cd2158678aa.png",
   canonicalUrl
 }: SEOHeadProps) => {
   const location = useLocation();
