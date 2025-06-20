@@ -47,34 +47,31 @@ const Navigation = () => {
     }
   ];
 
-  // Landing pages are now treated as marketing strategy components, not navigation
-  // They can be accessed directly via URL but are not in the main navigation
-
   return (
     <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">WX</span>
+          <Link to="/" className="flex items-center space-x-2 min-w-0 flex-shrink-0">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-whatsapp-green rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xs sm:text-sm">WX</span>
             </div>
-            <span className="text-xl font-bold text-gray-900">WhatsX</span>
+            <span className="text-lg sm:text-xl font-bold text-gray-900 truncate">WhatsX</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden lg:flex items-center space-x-1">
             <NavigationMenu>
               <NavigationMenuList>
                 {navigationItems.map((item) => (
                   <NavigationMenuItem key={item.name}>
                     {item.items ? (
                       <>
-                        <NavigationMenuTrigger className="bg-transparent hover:bg-whatsapp-light-green/50">
+                        <NavigationMenuTrigger className="bg-transparent hover:bg-whatsapp-light-green/50 text-sm">
                           {item.name}
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                          <div className="grid w-[300px] gap-3 p-4">
+                          <div className="grid w-[280px] sm:w-[300px] gap-3 p-4">
                             {item.items.map((subItem) => (
                               <Link
                                 key={subItem.path}
@@ -113,46 +110,46 @@ const Navigation = () => {
           </div>
 
           {/* CTA Button */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button asChild className="bg-whatsapp-green hover:bg-whatsapp-dark-green">
+          <div className="hidden sm:flex items-center space-x-4">
+            <Button asChild className="bg-whatsapp-green hover:bg-whatsapp-dark-green text-sm px-4 py-2 min-h-[40px]">
               <Link to="/form-builder">Get Started</Link>
             </Button>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2"
+              className="p-2 min-h-[44px] min-w-[44px]"
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+          <div className="lg:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200 max-h-[calc(100vh-4rem)] overflow-y-auto">
               {navigationItems.map((item) => (
                 <div key={item.name}>
                   {item.items ? (
                     <div className="space-y-1">
-                      <div className="px-3 py-2 text-sm font-medium text-gray-900 border-b border-gray-100">
+                      <div className="px-3 py-3 text-base font-medium text-gray-900 border-b border-gray-100">
                         {item.name}
                       </div>
                       {item.items.map((subItem) => (
                         <Link
                           key={subItem.path}
                           to={subItem.path}
-                          className="flex items-center justify-between px-6 py-2 text-sm text-gray-600 hover:text-whatsapp-dark-green hover:bg-whatsapp-light-green/50 rounded-md"
+                          className="flex items-center justify-between px-6 py-3 text-base text-gray-600 hover:text-whatsapp-dark-green hover:bg-whatsapp-light-green/50 rounded-md min-h-[48px]"
                           onClick={() => setIsOpen(false)}
                         >
                           <span>{subItem.name}</span>
                           {subItem.restricted && (
-                            <Lock className="w-3 h-3 text-gray-400" />
+                            <Lock className="w-4 h-4 text-gray-400" />
                           )}
                         </Link>
                       ))}
@@ -160,7 +157,7 @@ const Navigation = () => {
                   ) : (
                     <Link
                       to={item.path}
-                      className={`block px-3 py-2 rounded-md text-sm font-medium ${
+                      className={`block px-3 py-3 rounded-md text-base font-medium min-h-[48px] flex items-center ${
                         isActive(item.path)
                           ? "bg-whatsapp-green text-white"
                           : "text-gray-700 hover:bg-whatsapp-light-green/50 hover:text-whatsapp-dark-green"
@@ -173,7 +170,7 @@ const Navigation = () => {
                 </div>
               ))}
               <div className="pt-4 border-t border-gray-200">
-                <Button asChild className="w-full bg-whatsapp-green hover:bg-whatsapp-dark-green">
+                <Button asChild className="w-full bg-whatsapp-green hover:bg-whatsapp-dark-green min-h-[48px] text-base">
                   <Link to="/form-builder" onClick={() => setIsOpen(false)}>
                     Get Started
                   </Link>
