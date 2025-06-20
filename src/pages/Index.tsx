@@ -1,3 +1,4 @@
+
 import React from "react";
 import Layout from "@/components/Layout";
 import { Link } from 'react-router-dom';
@@ -58,7 +59,12 @@ const features: Feature[] = [
 
 const Index = () => {
   return (
-    <Layout>
+    <Layout
+      seoTitle="WhatsX - Turn Website Visitors Into WhatsApp Leads | AI-Powered Lead Generation"
+      seoDescription="Create AI-powered form popups that capture leads and instantly deliver them to your WhatsApp. Revolutionary SaaS tool with Google Gemini AI for 87% higher conversion rates."
+      seoKeywords="WhatsApp leads, lead generation, AI forms, form builder, WhatsApp integration, lead capture, popup forms, SaaS, conversion optimization, Google Gemini AI"
+      seoImage="/lovable-uploads/be006f58-eee2-40fe-8e43-6cd2158678aa.png"
+    >
       <section className="bg-gradient-to-br from-whatsapp-light-green/30 via-white to-whatsapp-light-green/30 py-20">
         <div className="container mx-auto text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-6 hero-title">

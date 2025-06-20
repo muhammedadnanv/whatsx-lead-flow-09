@@ -1,4 +1,8 @@
 
+User-agent: *
+Allow: /
+
+# Specific crawlers
 User-agent: Googlebot
 Allow: /
 
@@ -11,7 +15,21 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+User-agent: LinkedInBot
 Allow: /
 
+User-agent: WhatsApp
+Allow: /
+
+# Disallow admin/private areas (add if needed)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Crawl delay
+Crawl-delay: 1
+
+# Sitemap location
 Sitemap: https://whatsx.lovable.app/sitemap.xml
+
+# Host directive
+Host: https://whatsx.lovable.app
