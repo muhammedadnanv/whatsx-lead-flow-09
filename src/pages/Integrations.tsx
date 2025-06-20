@@ -1,9 +1,122 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { ArrowLeft, MessageCircle, Zap, Mail, Database, Webhook, Globe, Settings, CheckCircle, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import AccessControl from "@/components/AccessControl";
+
+const integrationCategories = [
+  {
+    title: "Communication",
+    icon: MessageCircle,
+    integrations: [
+      {
+        name: "WhatsApp Business API",
+        description: "Connect directly with WhatsApp Business API for enhanced messaging capabilities",
+        status: "native",
+        popular: true
+      },
+      {
+        name: "Telegram Bot",
+        description: "Integrate with Telegram for automated bot conversations",
+        status: "available",
+        popular: false
+      },
+      {
+        name: "SMS Gateway",
+        description: "Send SMS notifications and alerts to your customers",
+        status: "available",
+        popular: true
+      }
+    ]
+  },
+  {
+    title: "Email Marketing",
+    icon: Mail,
+    integrations: [
+      {
+        name: "Mailchimp",
+        description: "Sync contacts and automate email campaigns",
+        status: "available",
+        popular: true
+      },
+      {
+        name: "SendGrid",
+        description: "Reliable email delivery and analytics",
+        status: "available",
+        popular: false
+      },
+      {
+        name: "ConvertKit",
+        description: "Creator-focused email marketing automation",
+        status: "coming-soon",
+        popular: false
+      }
+    ]
+  },
+  {
+    title: "Database & Storage",
+    icon: Database,
+    integrations: [
+      {
+        name: "Google Sheets",
+        description: "Store form responses directly in Google Sheets",
+        status: "available",
+        popular: true
+      },
+      {
+        name: "Airtable",
+        description: "Organize data in powerful databases",
+        status: "available",
+        popular: true
+      },
+      {
+        name: "MySQL",
+        description: "Connect to your MySQL database",
+        status: "available",
+        popular: false
+      }
+    ]
+  },
+  {
+    title: "Automation",
+    icon: Zap,
+    integrations: [
+      {
+        name: "Zapier",
+        description: "Connect with 5000+ apps through Zapier automation",
+        status: "available",
+        popular: true
+      },
+      {
+        name: "Make (Integromat)",
+        description: "Advanced automation workflows",
+        status: "available",
+        popular: false
+      },
+      {
+        name: "IFTTT",
+        description: "Simple automation for everyday tasks",
+        status: "coming-soon",
+        popular: false
+      }
+    ]
+  }
+];
+
+const getStatusBadge = (status: string) => {
+  switch (status) {
+    case "native":
+      return <Badge className="bg-green-100 text-green-800">Native</Badge>;
+    case "available":
+      return <Badge className="bg-blue-100 text-blue-800">Available</Badge>;
+    case "coming-soon":
+      return <Badge className="bg-gray-100 text-gray-800">Coming Soon</Badge>;
+    default:
+      return <Badge className="bg-gray-100 text-gray-800">Unknown</Badge>;
+  }
+};
 
 const Integrations = () => {
   return (
