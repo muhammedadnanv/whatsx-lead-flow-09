@@ -31,6 +31,7 @@ const queryClient = new QueryClient({
     queries: {
       retry: 1,
       staleTime: 5 * 60 * 1000, // 5 minutes
+      refetchOnWindowFocus: false,
     },
   },
 });
@@ -62,7 +63,7 @@ const App = () => (
             <Route path="/business" element={<BusinessLanding />} />
             <Route path="/developers" element={<DeveloperLanding />} />
             <Route path="/mobile" element={<MobileLanding />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            {/* 404 - MUST be the last route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
