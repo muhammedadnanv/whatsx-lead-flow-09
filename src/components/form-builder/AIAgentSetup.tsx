@@ -27,10 +27,75 @@ interface AIAgentSetupProps {
   onUpdateConfig: (updates: Partial<AIAgentConfig>) => void;
 }
 
+const formBuilderTemplates = [
+  {
+    id: 1,
+    name: "Form Assistant",
+    description: "Help users complete forms and answer questions about form fields",
+    category: "Forms",
+    popular: true,
+    config: {
+      agentName: "Form Assistant",
+      systemPrompt: "You are a helpful form assistant. Help users understand form fields, provide guidance on filling out forms, and answer questions about the form process. Be friendly and supportive.",
+      welcomeMessage: "Hi! I'm here to help you with this form. Do you have any questions about filling it out?",
+      temperature: 0.3,
+      maxTokens: 512
+    }
+  },
+  {
+    id: 2,
+    name: "Customer Support",
+    description: "Provide customer support for form-related inquiries",
+    category: "Support",
+    popular: true,
+    config: {
+      agentName: "Customer Support",
+      systemPrompt: "You are a customer support agent for form submissions. Help users with their questions, resolve issues, and provide clear guidance. Always be professional and helpful.",
+      welcomeMessage: "Hello! I'm your customer support assistant. How can I help you today?",
+      temperature: 0.2,
+      maxTokens: 512
+    }
+  },
+  {
+    id: 3,
+    name: "Lead Qualifier",
+    description: "Qualify leads and gather additional information from prospects",
+    category: "Sales",
+    popular: false,
+    config: {
+      agentName: "Sales Assistant",
+      systemPrompt: "You are a sales qualification assistant. Help qualify leads by asking relevant questions about their needs, budget, and timeline. Be professional but friendly.",
+      welcomeMessage: "Welcome! I'd love to learn more about your needs. What brings you here today?",
+      temperature: 0.4,
+      maxTokens: 512
+    }
+  },
+  {
+    id: 4,
+    name: "Technical Support",
+    description: "Provide technical assistance for form issues and troubleshooting",
+    category: "Technical",
+    popular: false,
+    config: {
+      agentName: "Tech Support",
+      systemPrompt: "You are a technical support specialist for forms. Help users troubleshoot technical issues, explain how to use form features, and provide step-by-step guidance.",
+      welcomeMessage: "Hi! I'm here to help with any technical issues you're experiencing with this form. What seems to be the problem?",
+      temperature: 0.2,
+      maxTokens: 768
+    }
+  }
+];
+
 export const AIAgentSetup = ({ config, onUpdateConfig }: AIAgentSetupProps) => {
   const { toast } = useToast();
   const [isTestingConnection, setIsTestingConnection] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
+  const categories = ["All", "Forms", "Support", "Sales", "Technical"];
+  const filteredTemplates = selectedCategory === "All" 
+    ? formBuilderTemplates 
+    : formBuilderTemplates.filter(template => template.category === selectedCategory);
 
   const testGeminiConnection = async () => {
     if (!config.geminiApiKey) {
@@ -152,8 +217,57 @@ export const AIAgentSetup = ({ config, onUpdateConfig }: AIAgentSetupProps) => {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="templates" className="mt-4">
-                <AIAgentTemplates onSelectTemplate={handleTemplateSelect} />
+              <TabsContent value="templates" className="mt-4 space-y-4">
+                {/* Category Filter */}
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((category) => (
+                    <Button
+                      key={category}
+                      variant={selectedCategory === category ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedCategory(category)}
+                      className="text-xs"
+                    >
+                      {category}
+                    </Button>
+                  ))}
+                </div>
+
+                {/* Templates Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredTemplates.map((template) => (
+                    <Card key={template.id} className="hover:shadow-lg transition-shadow">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <CardTitle className="text-base flex items-center">
+                              {template.name}
+                              {template.popular && (
+                                <Badge className="ml-2 bg-green-100 text-green-800 text-xs">
+                                  <Sparkles className="w-3 h-3 mr-1" />
+                                  Popular
+                                </Badge>
+                              )}
+                            </CardTitle>
+                            <Badge variant="outline" className="text-xs mt-1">
+                              {template.category}
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <p className="text-sm text-gray-600 mb-4">{template.description}</p>
+                        <Button
+                          onClick={() => handleTemplateSelect(template)}
+                          size="sm"
+                          className="w-full bg-blue-600 hover:bg-blue-700"
+                        >
+                          Use This Template
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </TabsContent>
 
               <TabsContent value="custom" className="mt-4 space-y-6">

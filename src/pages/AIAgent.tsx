@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Key, MessageSquare, Settings, Sparkles, ArrowLeft, Send, X, Copy, Download, Code, ExternalLink } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Bot, Key, MessageSquare, Settings, Sparkles, ArrowLeft, Send, X, Copy, Download, Code, ExternalLink, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
@@ -15,6 +16,93 @@ interface ChatMessage {
   isUser: boolean;
   timestamp: Date;
 }
+
+const aiAgentTemplates = [
+  {
+    id: 1,
+    name: "Customer Support Assistant",
+    description: "Helpful customer service agent for e-commerce and service businesses",
+    category: "Support",
+    popular: true,
+    config: {
+      agentName: "Customer Support Assistant",
+      systemPrompt: "You are a helpful customer support assistant. Provide clear, friendly, and professional responses to customer inquiries. Always be empathetic and solution-oriented. If you cannot resolve an issue, guide customers to appropriate next steps.",
+      welcomeMessage: "Hi! I'm your customer support assistant. How can I help you today?",
+      temperature: 0.3,
+      maxTokens: 512
+    }
+  },
+  {
+    id: 2,
+    name: "Sales Lead Qualifier",
+    description: "Engage prospects and qualify leads through intelligent conversations",
+    category: "Sales",
+    popular: true,
+    config: {
+      agentName: "Sales Assistant",
+      systemPrompt: "You are a professional sales assistant. Your goal is to understand customer needs, qualify leads, and guide prospects through the sales process. Ask relevant questions to understand their requirements and budget. Be helpful but not pushy.",
+      welcomeMessage: "Hello! I'd love to learn more about your needs and see how we can help. What brings you here today?",
+      temperature: 0.5,
+      maxTokens: 512
+    }
+  },
+  {
+    id: 3,
+    name: "Technical Support Bot",
+    description: "Provide technical assistance and troubleshooting guidance",
+    category: "Technical",
+    popular: false,
+    config: {
+      agentName: "Tech Support",
+      systemPrompt: "You are a technical support specialist. Help users troubleshoot technical issues with clear, step-by-step instructions. Ask clarifying questions to understand the problem better. Provide safe and accurate technical guidance.",
+      welcomeMessage: "Hi! I'm here to help with any technical issues you're experiencing. What seems to be the problem?",
+      temperature: 0.2,
+      maxTokens: 768
+    }
+  },
+  {
+    id: 4,
+    name: "Educational Tutor",
+    description: "Patient and knowledgeable tutor for learning and education",
+    category: "Education",
+    popular: false,
+    config: {
+      agentName: "Learning Assistant",
+      systemPrompt: "You are a patient and encouraging educational tutor. Help students understand concepts by breaking them down into simple explanations. Use examples and analogies to make learning easier. Always encourage and motivate learners.",
+      welcomeMessage: "Welcome! I'm excited to help you learn. What subject or topic would you like to explore today?",
+      temperature: 0.6,
+      maxTokens: 768
+    }
+  },
+  {
+    id: 5,
+    name: "Health & Wellness Coach",
+    description: "Supportive wellness companion for health and lifestyle guidance",
+    category: "Health",
+    popular: true,
+    config: {
+      agentName: "Wellness Coach",
+      systemPrompt: "You are a supportive health and wellness coach. Provide general wellness tips, motivation, and lifestyle guidance. Always remind users to consult healthcare professionals for medical advice. Focus on encouragement and positive lifestyle changes.",
+      welcomeMessage: "Hello! I'm your wellness companion. I'm here to support your health and wellness journey. How can I help you today?",
+      temperature: 0.4,
+      maxTokens: 512
+    }
+  },
+  {
+    id: 6,
+    name: "Creative Writing Assistant",
+    description: "Inspire and assist with creative writing projects and ideas",
+    category: "Creative",
+    popular: false,
+    config: {
+      agentName: "Writing Assistant",
+      systemPrompt: "You are a creative writing assistant. Help users with brainstorming, plot development, character creation, and overcoming writer's block. Provide constructive feedback and creative suggestions. Be encouraging and inspiring.",
+      welcomeMessage: "Greetings, fellow writer! I'm here to help spark your creativity and assist with your writing projects. What are you working on?",
+      temperature: 0.8,
+      maxTokens: 768
+    }
+  }
+];
 
 const AIAgent = () => {
   const { toast } = useToast();
@@ -31,6 +119,25 @@ const AIAgent = () => {
   const [isChatStarted, setIsChatStarted] = useState(false);
   const [isTestingConnection, setIsTestingConnection] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+
+  const categories = ["All", "Support", "Sales", "Technical", "Education", "Health", "Creative"];
+  const filteredTemplates = selectedCategory === "All" 
+    ? aiAgentTemplates 
+    : aiAgentTemplates.filter(template => template.category === selectedCategory);
+
+  const applyTemplate = (template: any) => {
+    setAgentName(template.config.agentName);
+    setSystemPrompt(template.config.systemPrompt);
+    setWelcomeMessage(template.config.welcomeMessage);
+    setTemperature(template.config.temperature);
+    setMaxTokens(template.config.maxTokens);
+    
+    toast({
+      title: "Template Applied! 🎉",
+      description: `${template.name} template has been applied to your AI agent.`,
+    });
+  };
 
   const testGeminiConnection = async () => {
     if (!geminiApiKey) {
@@ -927,212 +1034,301 @@ setTimeout(() => {
       </header>
 
       <div className="container mx-auto mobile-px py-4 md:py-6">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
-          {/* Configuration Panel */}
-          <div className="space-y-4 md:space-y-6">
-            <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center text-lg md:text-xl">
-                  <Settings className="w-5 h-5 mr-2 text-blue-600" />
-                  AI Configuration
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* API Key */}
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Key className="w-4 h-4 text-gray-600" />
-                    <Label htmlFor="geminiApiKey" className="text-sm md:text-base">Gemini API Key</Label>
-                    <Badge variant="secondary" className="text-xs">Required</Badge>
-                  </div>
-                  <Input
-                    id="geminiApiKey"
-                    type="password"
-                    value={geminiApiKey}
-                    onChange={(e) => {
-                      setGeminiApiKey(e.target.value);
-                      setConnectionStatus('idle');
-                    }}
-                    placeholder="AIzaSy..."
-                    className="font-mono text-sm min-h-[44px]"
-                  />
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                    <p className="text-xs text-gray-500">
-                      Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google AI Studio</a>
-                    </p>
-                    <Button
-                      onClick={testGeminiConnection}
-                      disabled={isTestingConnection || !geminiApiKey}
-                      size="sm"
-                      variant="outline"
-                      className="min-h-[44px] w-full sm:w-auto"
-                    >
-                      {isTestingConnection ? "Testing..." : "Test Connection"}
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Agent Settings */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="agentName" className="text-sm md:text-base">Agent Name</Label>
-                    <Input
-                      id="agentName"
-                      value={agentName}
-                      onChange={(e) => setAgentName(e.target.value)}
-                      placeholder="AI Assistant"
-                      className="min-h-[44px]"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="temperature" className="text-sm md:text-base">Creativity Level</Label>
-                    <Input
-                      id="temperature"
-                      type="number"
-                      min="0"
-                      max="1"
-                      step="0.1"
-                      value={temperature}
-                      onChange={(e) => setTemperature(parseFloat(e.target.value))}
-                      className="min-h-[44px]"
-                    />
-                  </div>
-                </div>
-
-                {/* System Prompt */}
-                <div className="space-y-2">
-                  <Label htmlFor="systemPrompt" className="text-sm md:text-base">System Instructions</Label>
-                  <Textarea
-                    id="systemPrompt"
-                    value={systemPrompt}
-                    onChange={(e) => setSystemPrompt(e.target.value)}
-                    placeholder="Define how your AI should behave..."
-                    rows={3}
-                    className="mobile-text resize-none"
-                  />
-                </div>
-
-                {/* Welcome Message */}
-                <div className="space-y-2">
-                  <Label htmlFor="welcomeMessage" className="text-sm md:text-base">Welcome Message</Label>
-                  <Textarea
-                    id="welcomeMessage"
-                    value={welcomeMessage}
-                    onChange={(e) => setWelcomeMessage(e.target.value)}
-                    placeholder="Hi! How can I help you today?"
-                    rows={2}
-                    className="mobile-text resize-none"
-                  />
-                </div>
-
-                {/* Max Tokens */}
-                <div className="space-y-2">
-                  <Label htmlFor="maxTokens" className="text-sm md:text-base">Max Response Length</Label>
-                  <Input
-                    id="maxTokens"
-                    type="number"
-                    min="100"
-                    max="2048"
-                    value={maxTokens}
-                    onChange={(e) => setMaxTokens(parseInt(e.target.value))}
-                    className="min-h-[44px]"
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Embed Code Section */}
-            <Card className="border-2 border-gradient-to-r from-purple-100 to-pink-100 bg-gradient-to-r from-purple-50 to-pink-50">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                  <div className="flex items-center">
-                    <Code className="w-5 h-5 mr-2 text-purple-600" />
-                    <span className="text-lg md:text-xl">Embed AI Agent</span>
-                    <Badge className="ml-2 bg-purple-100 text-purple-700 text-xs">
-                      <Sparkles className="w-3 h-3 mr-1" />
-                      <span className="hidden sm:inline">Integrate </span>Anywhere
-                    </Badge>
-                  </div>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-gray-600 mobile-text">
-                  Generate embed code to integrate this AI Agent into your website or platform. The chatbot will appear as a floating widget in the bottom-right corner.
-                </p>
-                
-                <div className="button-group flex flex-col sm:flex-row gap-3">
-                  <Button 
-                    onClick={copyEmbedCode} 
-                    disabled={!geminiApiKey}
-                    className="bg-purple-600 hover:bg-purple-700 text-white min-h-[44px] flex-1"
-                  >
-                    <Copy className="w-4 h-4 mr-2" />
-                    Copy Embed Code
-                  </Button>
-                  
-                  <Button 
-                    onClick={downloadEmbedCode} 
-                    disabled={!geminiApiKey}
-                    variant="outline" 
-                    className="border-purple-200 text-purple-600 hover:bg-purple-50 min-h-[44px] flex-1"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Download HTML
-                  </Button>
-                  
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => window.open('https://whatsx-nine.vercel.app/', '_blank')}
-                    className="text-purple-600 hover:bg-purple-50 min-h-[44px] sm:flex-none"
-                  >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Learn More
-                  </Button>
-                </div>
-
-                <div className="bg-white/50 rounded-lg p-3 md:p-4 border border-purple-200">
-                  <h4 className="font-medium text-purple-900 mb-2 flex items-center text-sm md:text-base">
-                    <Bot className="w-4 h-4 mr-2" />
-                    Integration Features:
-                  </h4>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <h5 className="font-medium text-purple-800 mb-1">🎨 Professional Design:</h5>
-                      <ul className="text-purple-700 space-y-1 text-xs">
-                        <li>• Floating chat bubble with smooth animations</li>
-                        <li>• Mobile-responsive design</li>
-                        <li>• Professional message interface</li>
-                        <li>• Typing indicators and status</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h5 className="font-medium text-blue-800 mb-1">⚡ Smart Features:</h5>
-                      <ul className="text-blue-700 space-y-1 text-xs">
-                        <li>• Auto-expanding input field</li>
-                        <li>• Keyboard shortcuts (Enter/Escape)</li>
-                        <li>• Notification badge system</li>
-                        <li>• Zero conflict with existing CSS</li>
-                      </ul>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-3 p-3 bg-white/50 rounded-lg">
-                    <h5 className="font-medium text-purple-900 mb-1 text-xs">🚀 Easy Integration:</h5>
-                    <ol className="list-decimal list-inside text-xs text-purple-700 space-y-1">
-                      <li>Configure your AI agent settings above</li>
-                      <li>Copy the embed code or download the HTML file</li>
-                      <li>Paste the code into your website before closing &lt;/body&gt; tag</li>
-                      <li>Your AI chatbot is now live on your website!</li>
-                    </ol>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        <Tabs defaultValue="configure" className="space-y-4">
+          <div className="flex flex-wrap gap-2">
+            <TabsList className="grid w-full sm:w-auto grid-cols-3 sm:grid-cols-none sm:inline-grid">
+              <TabsTrigger value="templates" className="flex items-center">
+                <FileText className="w-4 h-4 mr-1" />
+                <span className="hidden sm:inline">Templates</span>
+                <span className="sm:hidden">Templates</span>
+              </TabsTrigger>
+              <TabsTrigger value="configure" className="flex items-center">
+                <Settings className="w-4 h-4 mr-1" />
+                <span className="hidden sm:inline">Configure</span>
+                <span className="sm:hidden">Config</span>
+              </TabsTrigger>
+              <TabsTrigger value="test" className="flex items-center">
+                <MessageSquare className="w-4 h-4 mr-1" />
+                <span className="hidden sm:inline">Test Chat</span>
+                <span className="sm:hidden">Test</span>
+              </TabsTrigger>
+            </TabsList>
           </div>
 
-          {/* Chat Panel */}
-          <div className="space-y-4 md:space-y-6">
+          {/* Templates Tab */}
+          <TabsContent value="templates" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-blue-600" />
+                  AI Agent Templates
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Category Filter */}
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((category) => (
+                    <Button
+                      key={category}
+                      variant={selectedCategory === category ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setSelectedCategory(category)}
+                      className="text-xs"
+                    >
+                      {category}
+                    </Button>
+                  ))}
+                </div>
+
+                {/* Templates Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredTemplates.map((template) => (
+                    <Card key={template.id} className="hover:shadow-lg transition-shadow">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <CardTitle className="text-lg flex items-center">
+                              {template.name}
+                              {template.popular && (
+                                <Badge className="ml-2 bg-green-100 text-green-800 text-xs">
+                                  <Sparkles className="w-3 h-3 mr-1" />
+                                  Popular
+                                </Badge>
+                              )}
+                            </CardTitle>
+                            <Badge variant="outline" className="text-xs mt-1">
+                              {template.category}
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <p className="text-sm text-gray-600 mb-4">{template.description}</p>
+                        <Button
+                          onClick={() => applyTemplate(template)}
+                          size="sm"
+                          className="w-full bg-blue-600 hover:bg-blue-700"
+                        >
+                          Use This Template
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Configuration Tab */}
+          <TabsContent value="configure" className="space-y-4">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
+              {/* Configuration Panel */}
+              <div className="space-y-4 md:space-y-6">
+                <Card>
+                  <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center text-lg md:text-xl">
+                      <Settings className="w-5 h-5 mr-2 text-blue-600" />
+                      AI Configuration
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {/* API Key */}
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Key className="w-4 h-4 text-gray-600" />
+                        <Label htmlFor="geminiApiKey" className="text-sm md:text-base">Gemini API Key</Label>
+                        <Badge variant="secondary" className="text-xs">Required</Badge>
+                      </div>
+                      <Input
+                        id="geminiApiKey"
+                        type="password"
+                        value={geminiApiKey}
+                        onChange={(e) => {
+                          setGeminiApiKey(e.target.value);
+                          setConnectionStatus('idle');
+                        }}
+                        placeholder="AIzaSy..."
+                        className="font-mono text-sm min-h-[44px]"
+                      />
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <p className="text-xs text-gray-500">
+                          Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google AI Studio</a>
+                        </p>
+                        <Button
+                          onClick={testGeminiConnection}
+                          disabled={isTestingConnection || !geminiApiKey}
+                          size="sm"
+                          variant="outline"
+                          className="min-h-[44px] w-full sm:w-auto"
+                        >
+                          {isTestingConnection ? "Testing..." : "Test Connection"}
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Agent Settings */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="agentName" className="text-sm md:text-base">Agent Name</Label>
+                        <Input
+                          id="agentName"
+                          value={agentName}
+                          onChange={(e) => setAgentName(e.target.value)}
+                          placeholder="AI Assistant"
+                          className="min-h-[44px]"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="temperature" className="text-sm md:text-base">Creativity Level</Label>
+                        <Input
+                          id="temperature"
+                          type="number"
+                          min="0"
+                          max="1"
+                          step="0.1"
+                          value={temperature}
+                          onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                          className="min-h-[44px]"
+                        />
+                      </div>
+                    </div>
+
+                    {/* System Prompt */}
+                    <div className="space-y-2">
+                      <Label htmlFor="systemPrompt" className="text-sm md:text-base">System Instructions</Label>
+                      <Textarea
+                        id="systemPrompt"
+                        value={systemPrompt}
+                        onChange={(e) => setSystemPrompt(e.target.value)}
+                        placeholder="Define how your AI should behave..."
+                        rows={3}
+                        className="mobile-text resize-none"
+                      />
+                    </div>
+
+                    {/* Welcome Message */}
+                    <div className="space-y-2">
+                      <Label htmlFor="welcomeMessage" className="text-sm md:text-base">Welcome Message</Label>
+                      <Textarea
+                        id="welcomeMessage"
+                        value={welcomeMessage}
+                        onChange={(e) => setWelcomeMessage(e.target.value)}
+                        placeholder="Hi! How can I help you today?"
+                        rows={2}
+                        className="mobile-text resize-none"
+                      />
+                    </div>
+
+                    {/* Max Tokens */}
+                    <div className="space-y-2">
+                      <Label htmlFor="maxTokens" className="text-sm md:text-base">Max Response Length</Label>
+                      <Input
+                        id="maxTokens"
+                        type="number"
+                        min="100"
+                        max="2048"
+                        value={maxTokens}
+                        onChange={(e) => setMaxTokens(parseInt(e.target.value))}
+                        className="min-h-[44px]"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Embed Code Section */}
+                <Card className="border-2 border-gradient-to-r from-purple-100 to-pink-100 bg-gradient-to-r from-purple-50 to-pink-50">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <div className="flex items-center">
+                        <Code className="w-5 h-5 mr-2 text-purple-600" />
+                        <span className="text-lg md:text-xl">Embed AI Agent</span>
+                        <Badge className="ml-2 bg-purple-100 text-purple-700 text-xs">
+                          <Sparkles className="w-3 h-3 mr-1" />
+                          <span className="hidden sm:inline">Integrate </span>Anywhere
+                        </Badge>
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-sm text-gray-600 mobile-text">
+                      Generate embed code to integrate this AI Agent into your website or platform. The chatbot will appear as a floating widget in the bottom-right corner.
+                    </p>
+                    
+                    <div className="button-group flex flex-col sm:flex-row gap-3">
+                      <Button 
+                        onClick={copyEmbedCode} 
+                        disabled={!geminiApiKey}
+                        className="bg-purple-600 hover:bg-purple-700 text-white min-h-[44px] flex-1"
+                      >
+                        <Copy className="w-4 h-4 mr-2" />
+                        Copy Embed Code
+                      </Button>
+                      
+                      <Button 
+                        onClick={downloadEmbedCode} 
+                        disabled={!geminiApiKey}
+                        variant="outline" 
+                        className="border-purple-200 text-purple-600 hover:bg-purple-50 min-h-[44px] flex-1"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Download HTML
+                      </Button>
+                      
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => window.open('https://whatsx-nine.vercel.app/', '_blank')}
+                        className="text-purple-600 hover:bg-purple-50 min-h-[44px] sm:flex-none"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Learn More
+                      </Button>
+                    </div>
+
+                    <div className="bg-white/50 rounded-lg p-3 md:p-4 border border-purple-200">
+                      <h4 className="font-medium text-purple-900 mb-2 flex items-center text-sm md:text-base">
+                        <Bot className="w-4 h-4 mr-2" />
+                        Integration Features:
+                      </h4>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <h5 className="font-medium text-purple-800 mb-1">🎨 Professional Design:</h5>
+                          <ul className="text-purple-700 space-y-1 text-xs">
+                            <li>• Floating chat bubble with smooth animations</li>
+                            <li>• Mobile-responsive design</li>
+                            <li>• Professional message interface</li>
+                            <li>• Typing indicators and status</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h5 className="font-medium text-blue-800 mb-1">⚡ Smart Features:</h5>
+                          <ul className="text-blue-700 space-y-1 text-xs">
+                            <li>• Auto-expanding input field</li>
+                            <li>• Keyboard shortcuts (Enter/Escape)</li>
+                            <li>• Notification badge system</li>
+                            <li>• Zero conflict with existing CSS</li>
+                          </ul>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-3 p-3 bg-white/50 rounded-lg">
+                        <h5 className="font-medium text-purple-900 mb-1 text-xs">🚀 Easy Integration:</h5>
+                        <ol className="list-decimal list-inside text-xs text-purple-700 space-y-1">
+                          <li>Configure your AI agent settings above</li>
+                          <li>Copy the embed code or download the HTML file</li>
+                          <li>Paste the code into your website before closing &lt;/body&gt; tag</li>
+                          <li>Your AI chatbot is now live on your website!</li>
+                        </ol>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Test Chat Tab */}
+          <TabsContent value="test">
             <Card className="h-[400px] md:h-96">
               <CardHeader className="flex flex-row items-center justify-between pb-4">
                 <CardTitle className="flex items-center text-lg md:text-xl">
@@ -1217,8 +1413,8 @@ setTimeout(() => {
                 )}
               </CardContent>
             </Card>
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
