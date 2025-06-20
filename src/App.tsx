@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import MarketingRouter from "@/components/MarketingRouter";
 import Index from "./pages/Index";
 import FormBuilder from "./pages/FormBuilder";
 import AIAgent from "./pages/AIAgent";
@@ -19,7 +20,7 @@ import Tutorials from "./pages/Tutorials";
 import Contact from "./pages/Contact";
 import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
-// Landing Page Variations
+// Marketing Strategy Landing Pages (not in main navigation)
 import AILanding from "./pages/AILanding";
 import BuilderLanding from "./pages/BuilderLanding";
 import BusinessLanding from "./pages/BusinessLanding";
@@ -43,6 +44,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <MarketingRouter />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/form-builder" element={<FormBuilder />} />
@@ -57,7 +59,7 @@ const App = () => (
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />
-            {/* Landing Page Variations */}
+            {/* Marketing Strategy Landing Pages - Optimized for Conversion */}
             <Route path="/ai" element={<AILanding />} />
             <Route path="/builder" element={<BuilderLanding />} />
             <Route path="/business" element={<BusinessLanding />} />

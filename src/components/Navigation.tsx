@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -28,19 +28,13 @@ const Navigation = () => {
       name: "Resources",
       items: [
         { name: "Templates", path: "/templates" },
-        { name: "Integrations", path: "/integrations" },
+        { 
+          name: "Integrations", 
+          path: "/integrations",
+          restricted: true
+        },
         { name: "Documentation", path: "/documentation" },
         { name: "Tutorials", path: "/tutorials" },
-      ]
-    },
-    {
-      name: "Landing Pages",
-      items: [
-        { name: "AI Landing", path: "/ai" },
-        { name: "Builder Landing", path: "/builder" },
-        { name: "Business Landing", path: "/business" },
-        { name: "Developer Landing", path: "/developers" },
-        { name: "Mobile Landing", path: "/mobile" },
       ]
     },
     {
@@ -52,6 +46,9 @@ const Navigation = () => {
       ]
     }
   ];
+
+  // Landing pages are now treated as marketing strategy components, not navigation
+  // They can be accessed directly via URL but are not in the main navigation
 
   return (
     <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
@@ -82,11 +79,14 @@ const Navigation = () => {
                               <Link
                                 key={subItem.path}
                                 to={subItem.path}
-                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-whatsapp-light-green/50 hover:text-whatsapp-dark-green focus:bg-whatsapp-light-green/50 focus:text-whatsapp-dark-green"
+                                className="flex items-center justify-between select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-whatsapp-light-green/50 hover:text-whatsapp-dark-green focus:bg-whatsapp-light-green/50 focus:text-whatsapp-dark-green"
                               >
                                 <div className="text-sm font-medium leading-none">
                                   {subItem.name}
                                 </div>
+                                {subItem.restricted && (
+                                  <Lock className="w-3 h-3 text-gray-400" />
+                                )}
                               </Link>
                             ))}
                           </div>
@@ -147,10 +147,13 @@ const Navigation = () => {
                         <Link
                           key={subItem.path}
                           to={subItem.path}
-                          className="block px-6 py-2 text-sm text-gray-600 hover:text-whatsapp-dark-green hover:bg-whatsapp-light-green/50 rounded-md"
+                          className="flex items-center justify-between px-6 py-2 text-sm text-gray-600 hover:text-whatsapp-dark-green hover:bg-whatsapp-light-green/50 rounded-md"
                           onClick={() => setIsOpen(false)}
                         >
-                          {subItem.name}
+                          <span>{subItem.name}</span>
+                          {subItem.restricted && (
+                            <Lock className="w-3 h-3 text-gray-400" />
+                          )}
                         </Link>
                       ))}
                     </div>
