@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, Lock, Sparkles } from "lucide-react";
+import { Menu, X, ChevronDown, Lock, Sparkles, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -44,7 +44,8 @@ const Navigation = () => {
         { name: "Contact Sales", path: "/contact" },
         { name: "Get Support", path: "/support" },
       ]
-    }
+    },
+    { name: "Referral Program", path: "/referral", highlight: true }
   ];
 
   return (
@@ -99,12 +100,15 @@ const Navigation = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           to={item.path}
-                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                            isActive(item.path)
+                          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center ${
+                            item.highlight 
+                              ? "bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-700 border border-orange-200 hover:from-yellow-200 hover:to-orange-200" 
+                              : isActive(item.path)
                               ? "bg-whatsapp-green text-white shadow-md"
                               : "text-gray-700 hover:bg-whatsapp-light-green/30 hover:text-whatsapp-dark-green"
                           }`}
                         >
+                          {item.highlight && <Gift className="w-4 h-4 mr-1" />}
                           {item.name}
                         </Link>
                       </NavigationMenuLink>
@@ -167,12 +171,15 @@ const Navigation = () => {
                     <Link
                       to={item.path}
                       className={`block px-4 py-3 rounded-lg text-base font-medium min-h-[48px] flex items-center transition-all duration-200 ${
-                        isActive(item.path)
+                        item.highlight 
+                          ? "bg-gradient-to-r from-yellow-100 to-orange-100 text-orange-700 border border-orange-200" 
+                          : isActive(item.path)
                           ? "bg-whatsapp-green text-white shadow-md"
                           : "text-gray-700 hover:bg-whatsapp-light-green/20 hover:text-whatsapp-dark-green"
                       }`}
                       onClick={() => setIsOpen(false)}
                     >
+                      {item.highlight && <Gift className="w-4 h-4 mr-2" />}
                       {item.name}
                     </Link>
                   )}

@@ -19,6 +19,7 @@ import Integrations from "./pages/Integrations";
 import Tutorials from "./pages/Tutorials";
 import Contact from "./pages/Contact";
 import CookiePolicy from "./pages/CookiePolicy";
+import Referral from "./pages/Referral";
 import NotFound from "./pages/NotFound";
 // Marketing Strategy Landing Pages (not in main navigation)
 import AILanding from "./pages/AILanding";
@@ -56,6 +57,7 @@ const App = () => (
             <Route path="/tutorials" element={<Tutorials />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/referral" element={<Referral />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />

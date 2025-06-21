@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Linkedin, Github, Sparkles, MessageCircle, Mail, Phone } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Github, Sparkles, MessageCircle, Mail, Phone, Gift } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -26,8 +26,9 @@ const Footer = () => {
       ]
     },
     {
-      title: "Company & Legal",
+      title: "Earn & Legal",
       links: [
+        { name: "Referral Program", path: "/referral", highlight: true },
         { name: "Contact Sales", path: "/contact" },
         { name: "Privacy Policy", path: "/privacy-policy" },
         { name: "Terms of Service", path: "/terms-of-service" },
@@ -92,8 +93,13 @@ const Footer = () => {
                   <li key={link.path}>
                     <Link
                       to={link.path}
-                      className="text-gray-300 hover:text-whatsapp-green transition-colors duration-200 text-sm leading-relaxed hover:underline"
+                      className={`transition-colors duration-200 text-sm leading-relaxed hover:underline flex items-center ${
+                        link.highlight 
+                          ? "text-yellow-400 hover:text-yellow-300 font-medium" 
+                          : "text-gray-300 hover:text-whatsapp-green"
+                      }`}
                     >
+                      {link.highlight && <Gift className="w-4 h-4 mr-2" />}
                       {link.name}
                     </Link>
                   </li>
