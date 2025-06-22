@@ -21,6 +21,8 @@ import Contact from "./pages/Contact";
 import CookiePolicy from "./pages/CookiePolicy";
 import Referral from "./pages/Referral";
 import NotFound from "./pages/NotFound";
+import Pricing from "./pages/Pricing";
+import CodebaseAccess from "./pages/CodebaseAccess";
 // Marketing Strategy Landing Pages (not in main navigation)
 import AILanding from "./pages/AILanding";
 import BuilderLanding from "./pages/BuilderLanding";
@@ -58,6 +60,8 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/support" element={<Support />} />
             <Route path="/referral" element={<Referral />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/codebase-access" element={<CodebaseAccess />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/cookie-policy" element={<CookiePolicy />} />
