@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,6 @@ import {
   Twitter,
   Facebook,
   Linkedin,
-  Trophy,
   Star,
   TrendingUp
 } from "lucide-react";
@@ -83,8 +83,7 @@ const Referral = () => {
     activeReferrals: 8,
     totalEarnings: 2840,
     pendingEarnings: 480,
-    conversionRate: 67,
-    tier: "Gold"
+    conversionRate: 67
   };
 
   const referralHistory = [
@@ -298,54 +297,11 @@ const Referral = () => {
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Commission Tiers section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Commission Tiers</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 border rounded-lg border-whatsapp-green bg-whatsapp-light-green/10">
-                      <div className="flex items-center">
-                        <Trophy className="w-6 h-6 text-yellow-500 mr-3" />
-                        <div>
-                          <div className="font-semibold text-whatsapp-green">Gold Tier (Current)</div>
-                          <div className="text-sm text-gray-600">5-14 referrals</div>
-                        </div>
-                      </div>
-                      <div className="text-2xl font-bold text-whatsapp-green">30%</div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-center">
-                        <Trophy className="w-6 h-6 text-gray-400 mr-3" />
-                        <div>
-                          <div className="font-semibold">Platinum Tier</div>
-                          <div className="text-sm text-gray-600">15-29 referrals</div>
-                        </div>
-                      </div>
-                      <div className="text-2xl font-bold text-gray-700">35%</div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-center">
-                        <Trophy className="w-6 h-6 text-gray-400 mr-3" />
-                        <div>
-                          <div className="font-semibold">Diamond Tier</div>
-                          <div className="text-sm text-gray-600">30+ referrals</div>
-                        </div>
-                      </div>
-                      <div className="text-2xl font-bold text-gray-700">40%</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             </TabsContent>
 
             {/* Dashboard Tab */}
             <TabsContent value="dashboard" className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-sm font-medium text-gray-600">Total Referrals</CardTitle>
@@ -375,21 +331,6 @@ const Referral = () => {
                     <div className="text-sm text-gray-500 mt-1">Above average</div>
                   </CardContent>
                 </Card>
-
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium text-gray-600">Current Tier</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center">
-                      <Trophy className="w-8 h-8 text-yellow-500 mr-2" />
-                      <div>
-                        <div className="text-lg font-bold text-gray-900">{referralStats.tier}</div>
-                        <div className="text-sm text-gray-500">Level 3</div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </div>
 
               <Card>
@@ -409,7 +350,7 @@ const Referral = () => {
                       <div className="bg-whatsapp-green h-2 rounded-full" style={{ width: '80%' }}></div>
                     </div>
                     <p className="text-sm text-gray-600">
-                      Complete 2 more referrals this month to reach Platinum tier and unlock 35% commission rate!
+                      Share WhatsX with 2 more people this month to reach your referral goal!
                     </p>
                   </div>
                 </CardContent>
