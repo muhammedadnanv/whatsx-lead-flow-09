@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,17 +14,22 @@ const CodebaseAccess = () => {
   const { toast } = useToast();
 
   useEffect(() => {
+    console.log('CodebaseAccess component mounted');
     // Check if user already has access
     const accessGranted = localStorage.getItem('whatsxAccessGranted');
     const storedCode = localStorage.getItem('whatsxUnlockCode');
     
+    console.log('Checking stored access:', { accessGranted, storedCode });
+    
     if (accessGranted === 'true' && storedCode) {
       setHasAccess(true);
       setUnlockCode(storedCode);
+      console.log('Access granted from stored data');
     }
   }, []);
 
   const verifyUnlockCode = () => {
+    console.log('Verifying unlock code:', unlockCode);
     setIsVerifying(true);
     
     // Simulate verification
@@ -34,16 +38,21 @@ const CodebaseAccess = () => {
       const validCodes = ['WX-DEMO123', 'WX-TEST456']; // Demo codes
       const storedCode = localStorage.getItem('whatsxUnlockCode');
       
+      console.log('Verification check:', { unlockCode, storedCode, validCodes });
+      
       if (unlockCode.startsWith('WX-') && (unlockCode === storedCode || validCodes.includes(unlockCode))) {
         setHasAccess(true);
         localStorage.setItem('whatsxAccessGranted', 'true');
         localStorage.setItem('whatsxUnlockCode', unlockCode);
+        
+        console.log('Unlock code verified successfully');
         
         toast({
           title: "Access Granted!",
           description: "You can now download the codebase",
         });
       } else {
+        console.log('Invalid unlock code');
         toast({
           title: "Invalid Code",
           description: "Please check your unlock code and try again",
@@ -55,6 +64,7 @@ const CodebaseAccess = () => {
   };
 
   const downloadFile = (filename: string, content: string) => {
+    console.log('Downloading file:', filename);
     const element = document.createElement('a');
     const file = new Blob([content], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
@@ -65,6 +75,7 @@ const CodebaseAccess = () => {
   };
 
   const downloadWidgetCode = () => {
+    console.log('Downloading widget code');
     const widgetCode = `
 // WhatsX Embedded Widget - React Component
 import React, { useState } from 'react';
@@ -286,6 +297,7 @@ export default WhatsXWidget;
   };
 
   const downloadAIAgentCode = () => {
+    console.log('Downloading AI Agent code');
     const aiAgentCode = `
 // WhatsX AI Agent - Intelligent Chat Integration
 import React, { useState, useEffect, useRef } from 'react';
@@ -481,250 +493,6 @@ const AIAgent = ({
 };
 
 export default AIAgent;
-
-// CSS Styles (AIAgent.css)
-/*
-.ai-agent {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-.ai-trigger {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 15px 25px;
-  border-radius: 50px;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.ai-trigger:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(0,0,0,0.3);
-}
-
-.ai-chat-window {
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-  width: 350px;
-  height: 500px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-
-.ai-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.ai-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.ai-avatar {
-  width: 40px;
-  height: 40px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-}
-
-.ai-info h4 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.ai-status {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
-.ai-header button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.ai-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.message {
-  display: flex;
-}
-
-.message.ai {
-  justify-content: flex-start;
-}
-
-.message.user {
-  justify-content: flex-end;
-}
-
-.message-content {
-  max-width: 80%;
-  padding: 12px 16px;
-  border-radius: 18px;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.message.ai .message-content {
-  background: #f0f0f0;
-  color: #333;
-}
-
-.message.user .message-content {
-  background: #667eea;
-  color: white;
-}
-
-.typing {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.typing span {
-  width: 6px;
-  height: 6px;
-  background: #999;
-  border-radius: 50%;
-  animation: typing 1.4s infinite;
-}
-
-.typing span:nth-child(2) { animation-delay: 0.2s; }
-.typing span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes typing {
-  0%, 60%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-10px); }
-}
-
-.lead-form {
-  padding: 20px;
-  border-top: 1px solid #eee;
-  background: #f9f9f9;
-}
-
-.lead-form form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.lead-form input {
-  padding: 12px;
-  border: 2px solid #f0f0f0;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.lead-form button {
-  background: #667eea;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.ai-input {
-  display: flex;
-  padding: 15px;
-  border-top: 1px solid #eee;
-  gap: 10px;
-}
-
-.ai-input input {
-  flex: 1;
-  padding: 12px;
-  border: 2px solid #f0f0f0;
-  border-radius: 20px;
-  font-size: 14px;
-}
-
-.ai-input button {
-  background: #667eea;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.whatsapp-transfer {
-  padding: 15px;
-  text-align: center;
-}
-
-.whatsapp-transfer button {
-  background: #25D366;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 600;
-  width: 100%;
-}
-*/
-
-// Integration with Google Gemini API
-// Replace the generateAIResponse function with actual API calls:
-/*
-const generateAIResponse = async (userMessage) => {
-  try {
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=' + apiKey, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: \`You are a helpful customer service assistant. Respond to: "\${userMessage}"\`
-          }]
-        }]
-      })
-    });
-    
-    const data = await response.json();
-    return data.candidates[0].content.parts[0].text;
-  } catch (error) {
-    console.error('AI API Error:', error);
-    return "I'm sorry, I'm having trouble processing your request right now. Please try again.";
-  }
-};
-*/
 `;
 
     downloadFile('AIAgent.jsx', aiAgentCode);

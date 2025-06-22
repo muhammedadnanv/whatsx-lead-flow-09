@@ -23,6 +23,8 @@ export const UPIPayment: React.FC<UPIPaymentProps> = ({ onBack }) => {
   // Generate UPI payment link
   const upiLink = `upi://pay?pa=${upiId}&pn=${merchantName}&am=${amount}&cu=INR&tn=WhatsX%20Codebase%20Access`;
 
+  console.log('UPI Payment Component loaded', { paymentStatus, timeLeft });
+
   // Generate unlock code
   const generateUnlockCode = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -49,21 +51,26 @@ export const UPIPayment: React.FC<UPIPaymentProps> = ({ onBack }) => {
   };
 
   const handleUPIPayment = () => {
+    console.log('UPI Payment initiated', { upiLink });
+    
     // Open UPI app
     window.open(upiLink, '_blank');
     
     // Start checking for payment
     setPaymentStatus('checking');
+    console.log('Payment status changed to checking');
     
     // Simulate payment verification (in real app, this would be server-side)
     setTimeout(() => {
       const code = generateUnlockCode();
+      console.log('Generated unlock code:', code);
       setUnlockCode(code);
       setPaymentStatus('completed');
       
       // Store unlock code in localStorage
       localStorage.setItem('whatsxUnlockCode', code);
       localStorage.setItem('whatsxAccessGranted', 'true');
+      console.log('Stored access data in localStorage');
       
       toast({
         title: "Payment Successful!",
@@ -74,6 +81,7 @@ export const UPIPayment: React.FC<UPIPaymentProps> = ({ onBack }) => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
+    console.log('Copied to clipboard:', text);
     toast({
       title: "Copied!",
       description: "Copied to clipboard",
@@ -81,6 +89,7 @@ export const UPIPayment: React.FC<UPIPaymentProps> = ({ onBack }) => {
   };
 
   const handleManualPayment = () => {
+    console.log('Manual payment verification triggered');
     // Simulate manual verification
     const code = generateUnlockCode();
     setUnlockCode(code);
@@ -126,7 +135,10 @@ export const UPIPayment: React.FC<UPIPaymentProps> = ({ onBack }) => {
             <div className="space-y-3">
               <Button 
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600"
-                onClick={() => window.location.href = '/codebase-access'}
+                onClick={() => {
+                  console.log('Navigating to codebase access page');
+                  window.location.href = '/codebase-access';
+                }}
               >
                 <Download className="w-4 h-4 mr-2" />
                 Access Codebase Now
