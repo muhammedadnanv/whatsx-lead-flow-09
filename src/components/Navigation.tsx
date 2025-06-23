@@ -51,8 +51,8 @@ const Navigation = () => {
 
   const navigationItems = [
     { name: "Home", path: "/" },
-    { name: "Form Builder", path: "/form-builder", locked: true },
-    { name: "AI Agent", path: "/ai-agent", locked: true },
+    { name: "Form Builder", path: "/form-builder" },
+    { name: "AI Agent", path: "/ai-agent" },
     {
       name: "Solutions",
       items: [
@@ -76,12 +76,7 @@ const Navigation = () => {
     }
   ];
 
-  const handleNavClick = (path: string, isLocked?: boolean) => {
-    if (isLocked) {
-      // Redirect to pricing for locked features
-      window.location.href = '/pricing';
-      return;
-    }
+  const handleNavClick = (path: string) => {
     setIsOpen(false);
   };
 
@@ -144,8 +139,8 @@ const Navigation = () => {
                     ) : (
                       <NavigationMenuLink asChild>
                         <Link
-                          to={item.locked ? '/pricing' : item.path}
-                          onClick={() => handleNavClick(item.path, item.locked)}
+                          to={item.path}
+                          onClick={() => handleNavClick(item.path)}
                           className={`relative flex items-center px-3 lg:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 focus-visible:focus-visible ${
                             isActive(item.path)
                               ? "bg-whatsapp-green text-white shadow-md transform scale-105"
@@ -153,9 +148,6 @@ const Navigation = () => {
                           }`}
                         >
                           {item.name}
-                          {item.locked && (
-                            <Lock className="w-3 h-3 ml-1 opacity-60" />
-                          )}
                           {isActive(item.path) && (
                             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full animate-pulse" />
                           )}
@@ -217,8 +209,8 @@ const Navigation = () => {
                   </div>
                 ) : (
                   <Link
-                    to={item.locked ? '/pricing' : item.path}
-                    onClick={() => handleNavClick(item.path, item.locked)}
+                    to={item.path}
+                    onClick={() => handleNavClick(item.path)}
                     className={`relative flex items-center justify-between px-4 py-3 rounded-lg text-base font-medium min-h-[48px] transition-all duration-300 focus-visible:focus-visible ${
                       isActive(item.path)
                         ? "bg-whatsapp-green text-white shadow-md"
@@ -227,9 +219,6 @@ const Navigation = () => {
                   >
                     <span>{item.name}</span>
                     <div className="flex items-center space-x-2">
-                      {item.locked && (
-                        <Lock className="w-4 h-4 text-gray-400" />
-                      )}
                       {isActive(item.path) && (
                         <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
                       )}
