@@ -20,17 +20,35 @@ const Navigation = () => {
     return location.pathname === path;
   };
 
+  // Check if user has premium access
+  const hasPremiumAccess = () => {
+    return localStorage.getItem('whatsxAccessGranted') === 'true';
+  };
+
   const navigationItems = [
     { name: "Home", path: "/" },
-    { name: "Form Builder", path: "/form-builder" },
-    { name: "AI Agent", path: "/ai-agent" },
+    { 
+      name: "Form Builder", 
+      path: "/form-builder",
+      premium: true
+    },
+    { 
+      name: "AI Agent", 
+      path: "/ai-agent",
+      premium: true
+    },
     {
       name: "Solutions",
       items: [
-        { name: "Templates Library", path: "/templates" },
+        { 
+          name: "Templates Library", 
+          path: "/templates",
+          premium: true
+        },
         { 
           name: "Integrations Hub", 
           path: "/integrations",
+          premium: true,
           restricted: true
         },
         { name: "Documentation", path: "/documentation" },
@@ -47,6 +65,13 @@ const Navigation = () => {
     },
     { name: "Pricing", path: "/pricing", highlight: true }
   ];
+
+  const handlePremiumClick = (e: React.MouseEvent, path: string) => {
+    if (!hasPremiumAccess()) {
+      e.preventDefault();
+      window.location.href = '/pricing';
+    }
+  };
 
   return (
     <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -83,12 +108,18 @@ const Navigation = () => {
                               <Link
                                 key={subItem.path}
                                 to={subItem.path}
-                                className="flex items-center justify-between select-none space-y-1 rounded-lg p-3 leading-none no-underline outline-none transition-all hover:bg-whatsapp-light-green/20 hover:text-whatsapp-dark-green focus:bg-whatsapp-light-green/20 focus:text-whatsapp-dark-green group"
+                                onClick={(e) => subItem.premium && handlePremiumClick(e, subItem.path)}
+                                className={`flex items-center justify-between select-none space-y-1 rounded-lg p-3 leading-none no-underline outline-none transition-all hover:bg-whatsapp-light-green/20 hover:text-whatsapp-dark-green focus:bg-whatsapp-light-green/20 focus:text-whatsapp-dark-green group ${
+                                  subItem.premium && !hasPremiumAccess() ? 'opacity-60' : ''
+                                }`}
                               >
                                 <div className="text-sm font-medium leading-none">
                                   {subItem.name}
+                                  {subItem.premium && !hasPremiumAccess() && (
+                                    <span className="ml-2 text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">Premium</span>
+                                  )}
                                 </div>
-                                {subItem.restricted && (
+                                {(subItem.restricted || (subItem.premium && !hasPremiumAccess())) && (
                                   <Lock className="w-3 h-3 text-gray-400 group-hover:text-whatsapp-green transition-colors" />
                                 )}
                               </Link>
@@ -100,16 +131,23 @@ const Navigation = () => {
                       <NavigationMenuLink asChild>
                         <Link
                           to={item.path}
+                          onClick={(e) => item.premium && handlePremiumClick(e, item.path)}
                           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center ${
                             item.highlight 
                               ? "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border border-purple-200 hover:from-purple-200 hover:to-blue-200" 
                               : isActive(item.path)
                               ? "bg-whatsapp-green text-white shadow-md"
+                              : item.premium && !hasPremiumAccess()
+                              ? "text-gray-500 hover:bg-orange-100 hover:text-orange-700 opacity-60"
                               : "text-gray-700 hover:bg-whatsapp-light-green/30 hover:text-whatsapp-dark-green"
                           }`}
                         >
                           {item.highlight && <CreditCard className="w-4 h-4 mr-1" />}
+                          {item.premium && !hasPremiumAccess() && <Lock className="w-4 h-4 mr-1" />}
                           {item.name}
+                          {item.premium && !hasPremiumAccess() && (
+                            <span className="ml-2 text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">Premium</span>
+                          )}
                         </Link>
                       </NavigationMenuLink>
                     )}
@@ -121,12 +159,21 @@ const Navigation = () => {
 
           {/* Branded CTA Button */}
           <div className="hidden sm:flex items-center space-x-3">
-            <Button asChild className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold text-sm px-6 py-2.5 min-h-[44px] shadow-lg hover:shadow-xl transition-all duration-300">
-              <Link to="/pricing" className="flex items-center">
-                <CreditCard className="w-4 h-4 mr-2" />
-                Get Access ₹29
-              </Link>
-            </Button>
+            {hasPremiumAccess() ? (
+              <Button asChild className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold text-sm px-6 py-2.5 min-h-[44px] shadow-lg hover:shadow-xl transition-all duration-300">
+                <Link to="/codebase-access" className="flex items-center">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Access Codebase
+                </Link>
+              </Button>
+            ) : (
+              <Button asChild className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold text-sm px-6 py-2.5 min-h-[44px] shadow-lg hover:shadow-xl transition-all duration-300">
+                <Link to="/pricing" className="flex items-center">
+                  <CreditCard className="w-4 h-4 mr-2" />
+                  Get Access ₹29
+                </Link>
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -157,10 +204,26 @@ const Navigation = () => {
                         <Link
                           key={subItem.path}
                           to={subItem.path}
-                          className="flex items-center justify-between px-6 py-3 text-base text-gray-600 hover:text-whatsapp-dark-green hover:bg-whatsapp-light-green/20 rounded-lg min-h-[48px] transition-all duration-200"
-                          onClick={() => setIsOpen(false)}
+                          onClick={(e) => {
+                            if (subItem.premium && !hasPremiumAccess()) {
+                              e.preventDefault();
+                              setIsOpen(false);
+                              window.location.href = '/pricing';
+                            } else {
+                              setIsOpen(false);
+                            }
+                          }}
+                          className={`flex items-center justify-between px-6 py-3 text-base text-gray-600 hover:text-whatsapp-dark-green hover:bg-whatsapp-light-green/20 rounded-lg min-h-[48px] transition-all duration-200 ${
+                            subItem.premium && !hasPremiumAccess() ? 'opacity-60' : ''
+                          }`}
                         >
-                          <span>{subItem.name}</span>
+                          <span className="flex items-center">
+                            {subItem.premium && !hasPremiumAccess() && <Lock className="w-4 h-4 mr-2" />}
+                            {subItem.name}
+                            {subItem.premium && !hasPremiumAccess() && (
+                              <span className="ml-2 text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">Premium</span>
+                            )}
+                          </span>
                           {subItem.restricted && (
                             <Lock className="w-4 h-4 text-gray-400" />
                           )}
@@ -170,28 +233,51 @@ const Navigation = () => {
                   ) : (
                     <Link
                       to={item.path}
+                      onClick={(e) => {
+                        if (item.premium && !hasPremiumAccess()) {
+                          e.preventDefault();
+                          setIsOpen(false);
+                          window.location.href = '/pricing';
+                        } else {
+                          setIsOpen(false);
+                        }
+                      }}
                       className={`block px-4 py-3 rounded-lg text-base font-medium min-h-[48px] flex items-center transition-all duration-200 ${
                         item.highlight 
                           ? "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border border-purple-200" 
                           : isActive(item.path)
                           ? "bg-whatsapp-green text-white shadow-md"
+                          : item.premium && !hasPremiumAccess()
+                          ? "text-gray-500 hover:bg-orange-100 hover:text-orange-700 opacity-60"
                           : "text-gray-700 hover:bg-whatsapp-light-green/20 hover:text-whatsapp-dark-green"
                       }`}
-                      onClick={() => setIsOpen(false)}
                     >
                       {item.highlight && <CreditCard className="w-4 h-4 mr-2" />}
+                      {item.premium && !hasPremiumAccess() && <Lock className="w-4 h-4 mr-2" />}
                       {item.name}
+                      {item.premium && !hasPremiumAccess() && (
+                        <span className="ml-2 text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">Premium</span>
+                      )}
                     </Link>
                   )}
                 </div>
               ))}
               <div className="pt-4 border-t border-gray-200">
-                <Button asChild className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold min-h-[48px] text-base shadow-lg">
-                  <Link to="/pricing" onClick={() => setIsOpen(false)} className="flex items-center justify-center">
-                    <CreditCard className="w-4 h-4 mr-2" />
-                    Get Access ₹29
-                  </Link>
-                </Button>
+                {hasPremiumAccess() ? (
+                  <Button asChild className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold min-h-[48px] text-base shadow-lg">
+                    <Link to="/codebase-access" onClick={() => setIsOpen(false)} className="flex items-center justify-center">
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Access Codebase
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button asChild className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold min-h-[48px] text-base shadow-lg">
+                    <Link to="/pricing" onClick={() => setIsOpen(false)} className="flex items-center justify-center">
+                      <CreditCard className="w-4 h-4 mr-2" />
+                      Get Access ₹29
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
           </div>
