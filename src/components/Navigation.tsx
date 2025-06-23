@@ -44,8 +44,7 @@ const Navigation = () => {
         { name: "Contact Sales", path: "/contact" },
         { name: "Get Support", path: "/support" },
       ]
-    },
-    { name: "Pricing", path: "/pricing", highlight: true }
+    }
   ];
 
   return (
@@ -101,14 +100,11 @@ const Navigation = () => {
                         <Link
                           to={item.path}
                           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center ${
-                            item.highlight 
-                              ? "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border border-purple-200 hover:from-purple-200 hover:to-blue-200" 
-                              : isActive(item.path)
-                              ? "bg-whatsapp-green text-white shadow-md"
-                              : "text-gray-700 hover:bg-whatsapp-light-green/30 hover:text-whatsapp-dark-green"
+                            isActive(item.path)
+                            ? "bg-whatsapp-green text-white shadow-md"
+                            : "text-gray-700 hover:bg-whatsapp-light-green/30 hover:text-whatsapp-dark-green"
                           }`}
                         >
-                          {item.highlight && <CreditCard className="w-4 h-4 mr-1" />}
                           {item.name}
                         </Link>
                       </NavigationMenuLink>
@@ -117,16 +113,6 @@ const Navigation = () => {
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
-          </div>
-
-          {/* Branded CTA Button */}
-          <div className="hidden sm:flex items-center space-x-3">
-            <Button asChild className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold text-sm px-6 py-2.5 min-h-[44px] shadow-lg hover:shadow-xl transition-all duration-300">
-              <Link to="/pricing" className="flex items-center">
-                <CreditCard className="w-4 h-4 mr-2" />
-                Get Access ₹29
-              </Link>
-            </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -171,28 +157,17 @@ const Navigation = () => {
                     <Link
                       to={item.path}
                       className={`block px-4 py-3 rounded-lg text-base font-medium min-h-[48px] flex items-center transition-all duration-200 ${
-                        item.highlight 
-                          ? "bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border border-purple-200" 
-                          : isActive(item.path)
-                          ? "bg-whatsapp-green text-white shadow-md"
-                          : "text-gray-700 hover:bg-whatsapp-light-green/20 hover:text-whatsapp-dark-green"
+                        isActive(item.path)
+                        ? "bg-whatsapp-green text-white shadow-md"
+                        : "text-gray-700 hover:bg-whatsapp-light-green/20 hover:text-whatsapp-dark-green"
                       }`}
                       onClick={() => setIsOpen(false)}
                     >
-                      {item.highlight && <CreditCard className="w-4 h-4 mr-2" />}
                       {item.name}
                     </Link>
                   )}
                 </div>
               ))}
-              <div className="pt-4 border-t border-gray-200">
-                <Button asChild className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold min-h-[48px] text-base shadow-lg">
-                  <Link to="/pricing" onClick={() => setIsOpen(false)} className="flex items-center justify-center">
-                    <CreditCard className="w-4 h-4 mr-2" />
-                    Get Access ₹29
-                  </Link>
-                </Button>
-              </div>
             </div>
           </div>
         )}
