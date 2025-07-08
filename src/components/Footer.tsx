@@ -116,7 +116,7 @@ const Footer = () => {
               <span>© {currentYear} WhatsX. All rights reserved.</span>
               <span className="hidden md:inline">Made with ❤️ for lead generation</span>
               <div className="flex items-center space-x-2">
-                <span>Developed by</span>
+                <span>Powered by</span>
                 <a 
                   href="https://www.linkedin.com/in/muhammedadnanvv/" 
                   target="_blank" 
