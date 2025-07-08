@@ -4,6 +4,8 @@ import Layout from "@/components/Layout";
 import { Link } from 'react-router-dom';
 import { Sparkles, Rocket, Code, MessageSquare, FileCode2, Users, ShieldCheck, LucideIcon, Zap, Target, TrendingUp } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import AISaaSPopup from "@/components/AISaaSPopup";
+import { usePopupManager } from "@/hooks/usePopupManager";
 
 interface Feature {
   title: string;
@@ -59,6 +61,8 @@ const stats = [
 ];
 
 const Index = () => {
+  const { showAISaaSPopup, closeAISaaSPopup } = usePopupManager();
+
   return (
     <Layout
       seoTitle="WhatsX - Turn Website Visitors Into WhatsApp Leads | AI-Powered Lead Generation"
@@ -66,6 +70,11 @@ const Index = () => {
       seoKeywords="WhatsApp leads, lead generation, AI forms, form builder, WhatsApp integration, lead capture, popup forms, SaaS, conversion optimization, Google Gemini AI"
       seoImage="/lovable-uploads/be006f58-eee2-40fe-8e43-6cd2158678aa.png"
     >
+      {/* AI SaaS Popup */}
+      {showAISaaSPopup && (
+        <AISaaSPopup onClose={closeAISaaSPopup} />
+      )}
+
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-whatsapp-light-green/20 via-white to-whatsapp-light-green/30 pt-20 sm:pt-24 md:pt-28 pb-12 sm:pb-16 md:pb-20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-50" style={{
