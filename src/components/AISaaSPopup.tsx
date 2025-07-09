@@ -33,7 +33,7 @@ const AISaaSPopup: React.FC<AISaaSPopupProps> = ({ onClose }) => {
   };
 
   const handleWhatsAppContact = () => {
-    const phoneNumber = "916567778508";
+    const phoneNumber = "919656778508";
     const message = "Hi! I'm interested in building an AI SaaS product. Can you help me turn my idea into reality?";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -87,7 +87,7 @@ const AISaaSPopup: React.FC<AISaaSPopupProps> = ({ onClose }) => {
           <div className="mb-6">
             <div className="flex items-center space-x-2 text-whatsapp-green font-semibold">
               <MessageCircle className="w-4 h-4" />
-              <span>+91 65677 8508</span>
+              <span>+91 96567 78508</span>
             </div>
           </div>
 
